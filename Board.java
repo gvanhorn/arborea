@@ -1,5 +1,3 @@
-package arborea;
-
 public class Board {
 	Hex[][] board;
 	int offset;
@@ -8,8 +6,8 @@ public class Board {
 		offset = 4;
 		
 		board = new Hex[9][9];
-		for(int i = 0; i <10; i++){
-			for(int j=0; j <10; j++){
+		for(int i = 0; i <9; i++){
+			for(int j=0; j <9; j++){
 				board[i][j] = new Hex();
 			}
 			
@@ -17,12 +15,21 @@ public class Board {
 		
 	}
 	
+	public Hex getHex(int i, int j){
+		return board[i][j];
+	}
+	
+
+	
 	public void print(){
-		for(int i = 0; i <10; i++){
-			for(int j=0; j <10; j++){
-				System.out.println(i + "," + j + "occupied: ");
+		for(int i = 0; i <9; i++){
+			for(int j=0; j <9; j++){
+				System.out.println(i + "," + j + " ");
 				board[i][j].print();
+				System.out.println();
 			}
 		}
 	}
+	
+
 }
