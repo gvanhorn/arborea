@@ -1,35 +1,63 @@
 public class Board {
 	Hex[][] board;
-	int offset;
+	int radius;
+	int range;
 	
 	Board(){
-		offset = 4;
-		
-		board = new Hex[9][9];
-		for(int i = 0; i <9; i++){
-			for(int j=0; j <9; j++){
-				board[i][j] = new Hex();
-			}
-			
-		}
-		
+		radius = 4;
+		initBoard();
 	}
 	
-	public Hex getHex(int i, int j){
-		return board[i][j];
+	private void initBoard(){
+		board = new Hex[2*radius+1][];
+		int counter = 1;
+		int rowLength;
+		int r, q;
+		for(int i = 0; i <9; i++){
+			//Axial coordinate r stays the same the entire row
+			r = i - radius;
+			
+			rowLength = radius + counter;
+			//System.out.println(rowLength);
+			//initialize row with correct length
+			if(i <= radius-1){	
+				board[i] = new Hex[rowLength];
+				counter++;
+			}else{
+				counter--;
+				board[i] = new Hex[rowLength];
+			}
+			
+			//fill row with hexes and their axial coordinates
+			for(int j = 0; j < rowLength; j ++){
+				//calculate axial coordinate q from array indexes.
+				q = -radius - Math.min(0, r) + j;
+				//System.out.println("q and r are resp.: " + q + "," + r);
+				//Create new hex with axialcoordinates
+				board[i][j] = new Hex(q, r);
+			}	
+		}
+	}
+	
+	
+	
+	public Hex getHex(int q, int r){
+		return board[r][q + radius + Math.min(0, r)];
 	}
 	
 
 	
 	public void print(){
-		for(int i = 0; i <9; i++){
-			for(int j=0; j <9; j++){
-				System.out.println(i + "," + j + " ");
-				board[i][j].print();
-				System.out.println();
-			}
+		for(Hex[] row : board){
+			printRow(row);
 		}
 	}
 	
+	public void printRow(Hex[] row){
+		for(Hex hex : row){
+			System.out.printf(hex.toString() + ", ");
+		}
+		System.out.printf("\n");
+	}
 
 }
