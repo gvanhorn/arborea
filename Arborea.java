@@ -13,8 +13,8 @@ public class Arborea {
 		
 		//board.print();
 		//board.getHex(0, 0).getUnit().print();
-//		Screen view = new Screen();
-//		view.addWindowListener(new ScreenListener());
+		Screen view = new Screen(board);
+		view.addWindowListener(new ScreenListener());
 //		
 	}
 

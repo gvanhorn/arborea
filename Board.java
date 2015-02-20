@@ -1,3 +1,8 @@
+/*
+ * www.redblobgames.com/grids/hexagons/
+ */
+
+
 public class Board {
 	Hex[][] board;
 	int radius;
