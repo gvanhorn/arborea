@@ -4,23 +4,16 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
 	Board board;
-<<<<<<< HEAD
+
 	int screenWidth, screenHeight;
 	double hexSize;
 	
 	Screen(Board providedBoard){
 		super("Main screen");
 		board = providedBoard;
-		this.setSize(800,800);
-		this.setVisible(true);
-=======
-		
-	Screen(Board providedBoard){
-		super("Main screen");
-		board = providedBoard;
 		setSize(800,800);
 		setVisible(true);
->>>>>>> b43af689a26d9bd59d69f270c4cc3786918fc1df
+
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 	}
@@ -34,46 +27,7 @@ public class Screen extends JFrame{
 		for(Polygon hex : hexGrid){
 			g2.draw(hex);        
 		}
-<<<<<<< HEAD
-	}
-	
-	public Polygon[] createHexGrid(){
-		Polygon[] hexGrid = new Polygon[61];
-		screenWidth = this.getSize().width;
-		screenHeight = this.getSize().height;
-		
-		hexSize = Math.floor((Math.min(screenWidth, screenHeight) - 20) / 18);
-		double hexWidth = 2 * hexSize;
-		double hexHeight = Math.sqrt(3)/2 * hexWidth;
-		double horizontalDistance = (double)hexWidth * 3/4 + 2;
-		double verticalDistance = hexHeight + 2; 
-		
-		//System.out.println(horizontalDistance);
-		
-		Point center = new Point(screenWidth/2, screenHeight/2);
-		int u,v,x,y;
-		int i =0;
-		for(Hex[] row : board.board){
-			for(Hex hex: row){
-				
-				u = hex.axialCoord.x;
-				v = hex.axialCoord.y;
-				x = center.x + (int)Math.floor(horizontalDistance * u);
-				y = center.y + (int)Math.floor(verticalDistance * (u*.5+v));
-				//System.out.println(horizontalDistance * u);
-//				System.out.println(x);
-				hexGrid[i] = createHexagon(x, y, hexSize);
-				i++;
-			}
-		}
-		
-		return hexGrid;
-	}
-	
-	
-	
-	
-=======
+
 	}
 	
 	public Polygon[] createHexGrid(){
@@ -110,9 +64,6 @@ public class Screen extends JFrame{
 	}
 	
 	
-	
-	
->>>>>>> b43af689a26d9bd59d69f270c4cc3786918fc1df
 	/*
 	 * Creates a hexagon around the coordinates given with a certain size.
 	 */
