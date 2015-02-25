@@ -1,9 +1,6 @@
 import java.awt.event.*;
 
-
-
-@SuppressWarnings("serial")
-public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener{
+public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener{
 
 	@Override
 	public void windowStateChanged(WindowEvent e) {
@@ -63,6 +60,40 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 	@Override
 	public void windowOpened(WindowEvent e) {
 		System.out.println("Window opened");
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
+		Screen screen = (Screen) e.getSource();
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

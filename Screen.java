@@ -1,61 +1,82 @@
 import java.awt.*;
-import java.awt.geom.*;
-
 import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
+	Board board;
+	int screenWidth, screenHeight;
+	double hexSize;
 	
-		
-	Screen(){
-		
+	Screen(Board providedBoard){
 		super("Main screen");
-		setSize(400,400);
-		setVisible(true);
+		board = providedBoard;
+		this.setSize(800,800);
+		this.setVisible(true);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 	}
 	
 	public void paint(Graphics g){
-		super.paint(g);  // fixes the immediate problem.
-        Graphics2D g2 = (Graphics2D) g;
-        //Line2D lin = new Line2D.Float(100, 100, 250, 260);
-        //g2.draw(lin);
+		super.paint(g);  
+        
+		Polygon[] hexGrid = createHexGrid();
 		
-		Point[] hexPoints = calcHexPoints(200, 200, 40);
-        //drawHex(hexPoints, g);
-		
-        for(int i = 0; i < 6; i++){
-        	Point punt1 = hexPoints[i];
-        	Point punt2 = hexPoints[(i+1) % 5];
-        	System.out.println(punt1 + ", " + punt2);
-        	Line2D lin = new Line2D.Float(punt1.x, punt1.y, punt2.x, punt2.y);
-        	
-        	g2.draw(lin);
-        }
+		Graphics2D g2 = (Graphics2D) g;
+		for(Polygon hex : hexGrid){
+			g2.draw(hex);        
+		}
 	}
 	
-//	public Line2D drawHex(Point[] hexPoints, Graphics g){
-//		
-//			
-//			
-//			
-//		
-//	}
+	public Polygon[] createHexGrid(){
+		Polygon[] hexGrid = new Polygon[61];
+		screenWidth = this.getSize().width;
+		screenHeight = this.getSize().height;
+		
+		hexSize = Math.floor((Math.min(screenWidth, screenHeight) - 20) / 18);
+		double hexWidth = 2 * hexSize;
+		double hexHeight = Math.sqrt(3)/2 * hexWidth;
+		double horizontalDistance = (double)hexWidth * 3/4 + 2;
+		double verticalDistance = hexHeight + 2; 
+		
+		//System.out.println(horizontalDistance);
+		
+		Point center = new Point(screenWidth/2, screenHeight/2);
+		int u,v,x,y;
+		int i =0;
+		for(Hex[] row : board.board){
+			for(Hex hex: row){
+				
+				u = hex.axialCoord.x;
+				v = hex.axialCoord.y;
+				x = center.x + (int)Math.floor(horizontalDistance * u);
+				y = center.y + (int)Math.floor(verticalDistance * (u*.5+v));
+				//System.out.println(horizontalDistance * u);
+//				System.out.println(x);
+				hexGrid[i] = createHexagon(x, y, hexSize);
+				i++;
+			}
+		}
+		
+		return hexGrid;
+	}
 	
-	public Point[] calcHexPoints(int x, int y, int size){
-		Point[] punten = new Point[6];
+	
+	
+	
+	/*
+	 * Creates a hexagon around the coordinates given with a certain size.
+	 */
+	public Polygon createHexagon(int x, int y, double size){
+		Polygon hex = new Polygon();
 		
 		for(int i = 0; i < 6; i ++){
-			double angle = (2* Math.PI ) / (6 * (i+1));
-			System.out.println(angle);
-			System.out.println(Math.cos(angle));
 			
-			
-			punten[i] = new Point((int)Math.round(x + size * Math.cos(angle)),
-								(int)Math.round(y + size * Math.sin(angle)));
-			
+			int xCoord = (int)Math.round(x + size * Math.cos(i * 2 * Math.PI / 6));
+			int yCoord = (int)Math.round(y +  size * Math.sin(i * 2 * Math.PI / 6));
+			hex.addPoint(xCoord,yCoord); 
+							
 		}
-		return punten;
+		return hex;
+		
 	}
 }
