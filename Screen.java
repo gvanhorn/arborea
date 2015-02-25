@@ -46,7 +46,7 @@ public class Screen extends JFrame{
 		Point center = new Point(screenWidth/2, screenHeight/2);
 		int u,v,x,y;
 		int i =0;
-		for(Hex[] row : board.board){
+		for(Hex[] row : board.getHexArray()){
 			for(Hex hex: row){
 				
 				u = hex.axialCoord.x;
@@ -55,7 +55,11 @@ public class Screen extends JFrame{
 				y = center.y + (int)Math.floor(verticalDistance * (u*.5+v));
 				//System.out.println(horizontalDistance * u);
 //				System.out.println(x);
-				hexGrid[i] = createHexagon(x, y, hexSize);
+				Polygon p = createHexagon(x, y, hexSize);
+				hexGrid[i] = p;
+				
+				hex.setShape(p);
+				
 				i++;
 			}
 		}

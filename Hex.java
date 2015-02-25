@@ -1,8 +1,11 @@
 import java.awt.Point;
+import java.awt.Polygon;
 
 
 
-public class Hex {
+@SuppressWarnings("serial")
+public class Hex{
+	Polygon shape;
 	Point axialCoord;
 	boolean occupied;
 	Unit unit;
@@ -20,6 +23,16 @@ public class Hex {
 	public boolean setCoord(int q, int r){
 		axialCoord = new Point(q, r);
 		return true;
+	}
+	
+	public boolean setShape(Polygon p){
+		if(shape == null){
+			shape = p;
+			return true;
+		}else{
+			shape = p;
+			return true;
+		}
 	}
 		
 	public boolean placeUnit(Unit newUnit){

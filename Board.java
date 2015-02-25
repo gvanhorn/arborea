@@ -44,7 +44,9 @@ public class Board {
 		}
 	}
 	
-	
+	public Hex[][] getHexArray(){
+		return board;
+	}
 	
 	public Hex getHex(int q, int r){
 		return board[r][q + radius + Math.min(0, r)];
