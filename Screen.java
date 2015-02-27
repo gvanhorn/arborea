@@ -12,10 +12,11 @@ public class Screen extends JPanel{
 	double hexSize;
 	Board board;
 	
-	
+	/*
+	 * 
+	 */
 	Screen(Board providedBoard, int[] screensize){
 		board = providedBoard;
-		
 		this.setDoubleBuffered(true);		
 		this.setBackground(Color.WHITE);
 
