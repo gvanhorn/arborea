@@ -1,8 +1,13 @@
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 
-public class Hex{
+import javax.swing.JComponent;
+
+@SuppressWarnings("serial")
+public class Hex extends JComponent{
 	Polygon shape;
 	Point axialCoord;
 	boolean occupied;
@@ -19,6 +24,19 @@ public class Hex{
 		axialCoord = new Point(q, r);
 		occupied = false;
 		color = c;
+	}
+	
+	public void paint(Graphics g){
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setPaint(this.color);
+		g2.draw(this.shape);
+		g2.fill(this.shape);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		this.paint(g);
 	}
 	
 	public boolean setCoord(int q, int r){
@@ -85,5 +103,7 @@ public class Hex{
 	public void print(){
 		System.out.printf("occupied: " + occupied);
 	}
+	
+
 
 }
