@@ -54,10 +54,12 @@ public class Board {
 		}
 		
 		
-		//Put references to neigbours in each hex
+		
+		//Put references to neighbors in each hex
 		int i;
 		Point[] neighbourCoords;
 		Hex[] neighbours;
+		
 		for(Hex[] row : board){
 			for(Hex h: row){
 				
@@ -66,36 +68,38 @@ public class Board {
 				i=0;
 				
 				for(Point p : neighbourCoords){
-					System.out.println(p);
-					if(p!=null){
-						try{
-							neighbours[i] = this.getHex(p.x, p.y);
-						}catch(Exception e){
-							System.out.println("wtf");
-						}
-					}
+					
+					try{
+						neighbours[i] = this.getHex(p.x, p.y);
+					}catch(Exception e){
+						System.out.println(e.toString());}
 					i++;
 				}
+				
+				h.neighbours = neighbours;
 			}
 		}
-		
+		System.out.println(getHex(0,0).neighbours[0]);
 	}
 	
 	public Hex[][] getHexArray(){
 		return board;
 	}
 	
+	//q and r are array indexes and returns the hex at that array index. 
 	public Hex getHex(int q, int r){
-		return board[r][q + radius + Math.min(0, r)];
+		return board[r + radius][q + radius + Math.min(0, r)];
 	}
 	
 	public void setSelected(Hex h){
 		if(selectedHex != null){
 			selectedHex.color = palette.green;
+			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
 		if(h != null){
 			selectedHex = h;
-			selectedHex.color = palette.orange;			
+			selectedHex.color = palette.orange;	
+			reColorHexGroup(h.neighbours, palette.lightOrange);
 		}
 		if(h == null){
 			selectedHex = null;
@@ -103,8 +107,12 @@ public class Board {
 		
 	}
 	
-	public void recolorHexGroup(Hex[] group, Color c){
-		
+	public void reColorHexGroup(Hex[] group, Color c){
+		for(Hex h : group){
+			if(h != null){
+				h.color = c;
+			}
+		}
 	}
 
 	public void print(){
