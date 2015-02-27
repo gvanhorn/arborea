@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 
@@ -49,8 +50,35 @@ public class Board {
 				//System.out.println("q and r are resp.: " + q + "," + r);
 				//Create new hex with axialcoordinates
 				board[i][j] = new Hex(q, r, palette.green);
-			}	
+			}
 		}
+		
+		
+		//Put references to neigbours in each hex
+		int i;
+		Point[] neighbourCoords;
+		Hex[] neighbours;
+		for(Hex[] row : board){
+			for(Hex h: row){
+				
+				neighbourCoords = h.getAdjacent();
+				neighbours = new Hex[6];
+				i=0;
+				
+				for(Point p : neighbourCoords){
+					System.out.println(p);
+					if(p!=null){
+						try{
+							neighbours[i] = this.getHex(p.x, p.y);
+						}catch(Exception e){
+							System.out.println("wtf");
+						}
+					}
+					i++;
+				}
+			}
+		}
+		
 	}
 	
 	public Hex[][] getHexArray(){
@@ -65,8 +93,18 @@ public class Board {
 		if(selectedHex != null){
 			selectedHex.color = palette.green;
 		}
-		selectedHex = h;
-		selectedHex.color = palette.orange;
+		if(h != null){
+			selectedHex = h;
+			selectedHex.color = palette.orange;			
+		}
+		if(h == null){
+			selectedHex = null;
+		}
+		
+	}
+	
+	public void recolorHexGroup(Hex[] group, Color c){
+		
 	}
 
 	public void print(){

@@ -1,5 +1,4 @@
 
-
 public class Player {
 Hex selected;
 boolean turn;

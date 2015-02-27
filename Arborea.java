@@ -6,8 +6,6 @@ import javax.swing.WindowConstants;
 
 
 public class Arborea {
-
-
 	
 	public static void main(String[] args){
 		int[] screensize = {800, 800}; 

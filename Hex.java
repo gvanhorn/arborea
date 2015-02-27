@@ -6,10 +6,12 @@ import java.awt.Polygon;
 
 import javax.swing.JComponent;
 
+
 @SuppressWarnings("serial")
 public class Hex extends JComponent{
 	Polygon shape;
 	Point axialCoord;
+	Hex[] neighbours;
 	boolean occupied;
 	Unit unit;
 	Color color;
