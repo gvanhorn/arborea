@@ -2,7 +2,7 @@ import java.awt.Point;
 import java.awt.event.*;
 
 public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener{
-
+	
 	@Override
 	public void windowStateChanged(WindowEvent e) {
 		// TODO Auto-generated method stub
@@ -71,14 +71,17 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		int y = e.getY();
 		System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
 		Screen screen = (Screen) e.getSource();
+		
 		for(Hex[] row: screen.board.getHexArray()){
 			for(Hex h: row){
 				if(h.shape.contains(x, y)){
 					System.out.println( h.axialCoord);
+					screen.board.setSelected(h);
 				}
 			}
 		}
 		
+		screen.repaint();
 	}
 
 	@Override

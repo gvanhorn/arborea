@@ -1,16 +1,17 @@
 
 
 public class Arborea {
+
+	Board board;
+	Player human;
+	Player cpu;
 	
 	public static void main(String[] args){
-		Board board = new Board();
 		
-		//board.print();		
-//		board.getHex(0,0).placeUnit(sword);
+		Arborea game = new Arborea();
 		
-		//board.print();
-		//board.getHex(0, 0).getUnit().print();
-		Screen view = new Screen(board);
+		Palette palette = new Palette();
+		Screen view = new Screen(game.board);
 
 		ScreenListener listener = new ScreenListener();
 		view.addWindowListener(listener);
@@ -18,5 +19,12 @@ public class Arborea {
 
 //		
 	}
+	
+	Arborea(){
+		board = new Board();
+		human = new Player();
+		cpu = new Player();
+	}
+
 
 }

@@ -1,23 +1,24 @@
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 
-
-
-@SuppressWarnings("serial")
 public class Hex{
 	Polygon shape;
 	Point axialCoord;
 	boolean occupied;
 	Unit unit;
+	Color color;
+	
 	
 	Hex(){
 		axialCoord = new Point();
 		occupied = false;
 	}
 	
-	Hex(int q, int r){
+	Hex(int q, int r, Color c){
 		axialCoord = new Point(q, r);
 		occupied = false;
+		color = c;
 	}
 	
 	public boolean setCoord(int q, int r){

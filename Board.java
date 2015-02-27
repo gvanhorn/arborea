@@ -7,10 +7,14 @@ public class Board {
 	Hex[][] board;
 	int radius;
 	int range;
+	Hex selectedHex;
+	Palette palette;
 	
 	Board(){
+		palette = new Palette();
 		radius = 4;
 		initBoard();
+		
 	}
 	
 	private void initBoard(){
@@ -39,7 +43,7 @@ public class Board {
 				q = -radius - Math.min(0, r) + j;
 				//System.out.println("q and r are resp.: " + q + "," + r);
 				//Create new hex with axialcoordinates
-				board[i][j] = new Hex(q, r);
+				board[i][j] = new Hex(q, r, palette.green);
 			}	
 		}
 	}
@@ -52,8 +56,14 @@ public class Board {
 		return board[r][q + radius + Math.min(0, r)];
 	}
 	
+	public void setSelected(Hex h){
+		if(selectedHex != null){
+			selectedHex.color = palette.green;
+		}
+		selectedHex = h;
+		selectedHex.color = palette.orange;
+	}
 
-	
 	public void print(){
 		for(Hex[] row : board){
 			printRow(row);

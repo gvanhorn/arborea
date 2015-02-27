@@ -10,7 +10,7 @@ public class Screen extends JFrame{
 	Board board;
 	int screenWidth, screenHeight;
 	double hexSize;
-
+	Polygon[] hexGrid;
 	
 	
 	Screen(Board providedBoard){
@@ -29,18 +29,20 @@ public class Screen extends JFrame{
 	public void paint(Graphics g){
 		super.paint(g);  
         
-		Polygon[] hexGrid = createHexGrid();
+		hexGrid = createHexGrid();
 		
 		Graphics2D g2 = (Graphics2D) g;
-		Color green = new Color(0x19A347);
-		g2.setPaint(green);
 		
-		for(Polygon hex : hexGrid){
-			g2.draw(hex);
-			g2.fill(hex);
+		for(Hex[] row : board.board){
+			for(Hex hex : row){
+				g2.setPaint(hex.color);
+				g2.draw(hex.shape);
+				g2.fill(hex.shape);
+			}
 		}
-
 	}
+	
+	
 	
 	public Polygon[] createHexGrid(){
 		Polygon[] hexGrid = new Polygon[61];
