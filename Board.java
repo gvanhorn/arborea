@@ -25,10 +25,11 @@ public class Board {
 	
 	private void initBoard(){
 		board = new Hex[2*radius+1][];
+		int rows = radius*2 + 1;
 		int counter = 1;
 		int rowLength;
 		int r, q;
-		for(int i = 0; i <9; i++){
+		for(int i = 0; i < rows; i++){
 			//Axial coordinate r stays the same the entire row
 			r = i - radius;
 			
@@ -132,7 +133,7 @@ public class Board {
 		int screenWidth = screensize[0];
 		int screenHeight = screensize[1];
 		
-		double hexSize = Math.floor((Math.min(screenWidth, screenHeight) - 20) / 18);
+		double hexSize = Math.floor((Math.min(screenWidth, screenHeight) - 20) / (board.length * 2));
 		double hexWidth = 2 * hexSize;
 		double hexHeight = Math.sqrt(3)/2 * hexWidth;
 		double horizontalDistance = (double)hexWidth * 3/4 + 3;
