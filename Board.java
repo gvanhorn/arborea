@@ -15,6 +15,7 @@ public class Board {
 	Palette palette;
 	int[] screensize;
 	
+	//Constructor for the board, screensize is the size of the window
 	Board(int[] screensize){
 		this.screensize = screensize;
 		palette = new Palette();
@@ -23,12 +24,15 @@ public class Board {
 		
 	}
 	
+	//Initialize the board
 	private void initBoard(){
 		board = new Hex[2*radius+1][];
 		int rows = radius*2 + 1;
 		int counter = 1;
 		int rowLength;
 		int r, q;
+		
+		//Make hexes to fill the board
 		for(int i = 0; i < rows; i++){
 			//Axial coordinate r stays the same the entire row
 			r = i - radius;
@@ -56,31 +60,35 @@ public class Board {
 		
 		
 		
-		//Put references to neighbors in each hex
+		
 		int i;
 		Point[] neighbourCoords;
 		Hex[] neighbours;
 		
+		//Put references to neighbors in each hex
 		for(Hex[] row : board){
 			for(Hex h: row){
 				
+				//Get the axial coordinates of the neighbors for the current hex
 				neighbourCoords = h.getAdjacent();
 				neighbours = new Hex[6];
-				i=0;
 				
+				i=0;
 				for(Point p : neighbourCoords){
-					
+					//If there is a neighbor, put it in the array, else leave it as null.
 					try{
 						neighbours[i] = this.getHex(p.x, p.y);
 					}catch(Exception e){
-						System.out.println(e.toString());}
+						//System.out.println(e.toString());
+					}
 					i++;
 				}
 				
+				//add the neighbor array to the hex
 				h.neighbours = neighbours;
 			}
 		}
-		System.out.println(getHex(0,0).neighbours[0]);
+		//System.out.println(getHex(0,0).neighbours[0]);
 	}
 	
 	public Hex[][] getHexArray(){
@@ -92,6 +100,7 @@ public class Board {
 		return board[r + radius][q + radius + Math.min(0, r)];
 	}
 	
+	//Set a hex to be selected and alter the colors on screen accordingly.
 	public void setSelected(Hex h){
 		if(selectedHex != null){
 			selectedHex.color = palette.green;
@@ -108,6 +117,7 @@ public class Board {
 		
 	}
 	
+	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
 		for(Hex h : group){
 			if(h != null){
@@ -116,6 +126,7 @@ public class Board {
 		}
 	}
 
+	//Some debugging methods to view the board in console
 	public void print(){
 		for(Hex[] row : board){
 			printRow(row);
@@ -129,21 +140,22 @@ public class Board {
 		System.out.printf("\n");
 	}
 	
+	//Create the initial graphics for the board
 	public void createHexGridGraphics(){
 		int screenWidth = screensize[0];
 		int screenHeight = screensize[1];
 		
-		double hexSize = Math.floor((Math.min(screenWidth, screenHeight) - 20) / (board.length * 2));
-		double hexWidth = 2 * hexSize;
+		//calculate the size of the hex according to the size of the window, 
+		double hexRadius = Math.floor((Math.min(screenWidth, screenHeight) - 20) / (board.length * 2));
+		double hexWidth = 2 * hexRadius;
 		double hexHeight = Math.sqrt(3)/2 * hexWidth;
 		double horizontalDistance = (double)hexWidth * 3/4 + 3;
 		double verticalDistance = hexHeight + 3; 
 		
-		System.out.println(horizontalDistance);
-		
 		Point center = new Point(screenWidth/2, screenHeight/2);
 		int u,v,x,y;
 		
+		//Create a hexagon shape for each hexagon.
 		for(Hex[] row : board){
 			for(Hex hex: row){
 				
@@ -152,7 +164,7 @@ public class Board {
 				x = center.x + (int)Math.floor(horizontalDistance * u);
 				y = center.y + (int)Math.floor(verticalDistance * (u*.5+v));
 
-				Polygon p = createHexagon(x, y, hexSize);
+				Polygon p = createHexagon(x, y, hexRadius);
 							
 				hex.setShape(p);
 			}
