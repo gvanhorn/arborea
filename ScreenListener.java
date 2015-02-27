@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.awt.event.*;
 
 public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener{
@@ -74,11 +75,9 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 			for(Hex h: row){
 				if(h.shape.contains(x, y)){
 					System.out.println( h.axialCoord);
-					
 				}
 			}
 		}
-		// TODO Auto-generated method stub
 		
 	}
 

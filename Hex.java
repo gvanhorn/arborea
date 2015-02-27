@@ -59,6 +59,19 @@ public class Hex{
 		return unit;
 	}
 	
+	public Point[] getAdjacent(){
+		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
+		Point[] adjacent = new Point[6];
+		int i=0;
+		for(int[] direction : directions){
+			Point tmp = new Point(axialCoord.x + direction[0], axialCoord.y + direction[1]);
+			adjacent[i] = tmp;
+			i++;
+		}
+		
+		return adjacent;
+	}
+	
 	public String toString(){
 		if(occupied){
 			return axialCoord.toString() + ": " + unit.name;

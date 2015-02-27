@@ -1,21 +1,29 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class Screen extends JFrame{
 	Board board;
-
 	int screenWidth, screenHeight;
 	double hexSize;
+
+	
 	
 	Screen(Board providedBoard){
 		super("Main screen");
 		board = providedBoard;
 		setSize(800,800);
 		setVisible(true);
-
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
+		JPanel p = new JPanel();
+		this.add(p);
+		p.setBackground(Color.WHITE);
+
 	}
 	
 	public void paint(Graphics g){
@@ -24,8 +32,12 @@ public class Screen extends JFrame{
 		Polygon[] hexGrid = createHexGrid();
 		
 		Graphics2D g2 = (Graphics2D) g;
+		Color green = new Color(0x19A347);
+		g2.setPaint(green);
+		
 		for(Polygon hex : hexGrid){
-			g2.draw(hex);        
+			g2.draw(hex);
+			g2.fill(hex);
 		}
 
 	}
