@@ -76,8 +76,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		
 		for(Hex[] row: screen.board.board){
 			for(Hex h: row){
-				
-				if(h.shape.contains(x, y)){
+				if(h.occupied && h.shape.contains(x, y)){
 					System.out.println( h.axialCoord);
 					if(screen.board.selectedHex != h){
 						screen.board.setSelected(h);

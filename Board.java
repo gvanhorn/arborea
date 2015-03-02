@@ -131,7 +131,7 @@ public class Board {
 		return board[r + radius][q + radius + Math.min(0, r)];
 	}
 	
-	//Set a hex to be selected and alter the colors on screen accordingly.
+	//Set a hex to be selected and alter the colors of hexes accordingly.
 	public void setSelected(Hex h){
 		if(selectedHex != null){
 			selectedHex.color = palette.green;
@@ -139,7 +139,7 @@ public class Board {
 		}
 		if(h != null){
 			selectedHex = h;
-			selectedHex.color = palette.orange;	
+			selectedHex.color = palette.orange;
 			reColorHexGroup(h.neighbours, palette.lightOrange);
 		}
 		if(h == null){
@@ -157,13 +157,14 @@ public class Board {
 		}
 	}
 
-	//Some debugging methods to view the board in console
+	//Prints the board to console
 	public void print(){
 		for(Hex[] row : board){
 			printRow(row);
 		}
 	}
 	
+	//prints a row to console
 	public void printRow(Hex[] row){
 		for(Hex hex : row){
 			System.out.printf(hex.toString() + ", ");
@@ -202,9 +203,7 @@ public class Board {
 		}
 	}
 	
-	/*
-	 * Creates a hexagon around the coordinates given with a certain size.
-	 */
+	//Creates a hexagon around the coordinates given with a certain size.
 	public Polygon createHexagon(int x, int y, double size){
 		Polygon hex = new Polygon();
 		
