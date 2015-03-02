@@ -15,7 +15,7 @@ public class Arborea {
 		JFrame frame = new JFrame("Main screen");
 		frame.setSize(screensize[0],screensize[1]);
 		frame.setResizable(true);
-		frame.setVisible(true);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Screen screen = new Screen(board, screensize);
@@ -27,6 +27,7 @@ public class Arborea {
 		frame.addWindowListener(listener);
 		screen.addMouseListener(listener);
 		
+		frame.setVisible(true);
 		
 		
 
