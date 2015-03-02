@@ -1,0 +1,19 @@
+To Do:
+
+- Images van units alignen zodat ze goed op het board staan
+
+- Systeem maken waarin aangegeven wordt wat de startposities van units zijn, 
+en deze unit op het board zetten
+
+- Functie om moves te maken
+ 
+- Player systeem
+
+- HP / Attack displayen
+
+
+
+
+Eventueel:
+- Images van units mee scalen met grootte van screen 
+- Klikken om units beginpositie neer te zetten.
