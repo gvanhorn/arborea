@@ -94,15 +94,23 @@ public class Board {
 		
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
-			File f = new File("initialUnits.txt");
+			File f = new File("initialUnits");
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String currentLine;
+			String type, owner;
+			int x, y;
 			while((currentLine = br.readLine()) != null){
-				String[] stuff = currentLine.split(",");
-				if (stuff[0].equals("Goblin")){
-					getHex(Integer.parseInt(stuff[2]), Integer.parseInt(stuff[3])).placeUnit(new Goblin(stuff[2]));
-				}else if(stuff[0].equals("Swordsman")){
-					getHex(Integer.parseInt(stuff[2]), Integer.parseInt(stuff[3])).placeUnit(new Swordsman(stuff[2]));
+				String[] stuff = currentLine.split(", ");
+				type = stuff[0];
+				owner = stuff[1];
+				x = Integer.parseInt(stuff[2]);
+				y = Integer.parseInt(stuff[3]);
+				
+				
+				if (type.equals("Goblin")){
+					getHex(x, y).placeUnit(new Goblin(owner));
+				}else if(type.equals("Swordsman")){
+					getHex(x, y).placeUnit(new Swordsman(owner));
 				}
 			}
 			br.close();
