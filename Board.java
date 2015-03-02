@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 
 /*
@@ -90,18 +91,26 @@ public class Board {
 				h.neighbours = neighbours;
 			}
 		}
-		//System.out.println(getHex(0,0).neighbours[0]);
+		
+		//Set up the initial units as specified by the file initialUnits.txt
 		try{
-			BufferedReader br = new BufferedReader(new FileReader("initialUnits.txt"));
+			File f = new File("initialUnits.txt");
+			BufferedReader br = new BufferedReader(new FileReader(f));
 			String currentLine;
 			while((currentLine = br.readLine()) != null){
 				String[] stuff = currentLine.split(",");
-				
+				if (stuff[0].equals("Goblin")){
+					getHex(Integer.parseInt(stuff[2]), Integer.parseInt(stuff[3])).placeUnit(new Goblin(stuff[2]));
+				}else if(stuff[0].equals("Swordsman")){
+					getHex(Integer.parseInt(stuff[2]), Integer.parseInt(stuff[3])).placeUnit(new Swordsman(stuff[2]));
+				}
 			}
-			
+			br.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		
 		
 	}
 	
