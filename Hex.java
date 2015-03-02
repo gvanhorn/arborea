@@ -8,8 +8,9 @@ import javax.swing.JComponent;
 
 
 @SuppressWarnings("serial")
-public class Hex extends JComponent{
+public class Hex {
 	Polygon shape;
+	Point euclCoord;
 	Point axialCoord;
 	Hex[] neighbours;
 	boolean occupied;
@@ -24,23 +25,15 @@ public class Hex extends JComponent{
 	
 	Hex(int q, int r, Color c){
 		axialCoord = new Point(q, r);
+		euclCoord = new Point();
 		occupied = false;
 		color = c;
 	}
-	
-	public void paint(Graphics g){
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setPaint(this.color);
-		g2.draw(this.shape);
-		g2.fill(this.shape);
+		
+	public void setEuclCoord(int centerX, int centerY){
+		euclCoord.x = centerX;
+		euclCoord.y = centerY;
 	}
-	
-	@Override
-	public void paintComponent(Graphics g){
-		super.paintComponent(g);
-		this.paint(g);
-	}
-	
 	public boolean setCoord(int q, int r){
 		axialCoord = new Point(q, r);
 		return true;

@@ -83,9 +83,6 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					}else{
 						screen.board.setSelected(null);
 					}
-					
-					h.paint(screen.getGraphics());
-
 				}
 			}
 		}

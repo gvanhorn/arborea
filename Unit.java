@@ -19,5 +19,9 @@ public abstract class Unit {
 	public void print(){
 		System.out.println("Name: " + name + ", hp: " + hitpoints + ", ws: " + weaponSkill);
 	}
+	
+	public String getName(){
+		return name;
+	}
 
 }

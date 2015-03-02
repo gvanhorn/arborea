@@ -89,6 +89,9 @@ public class Board {
 			}
 		}
 		//System.out.println(getHex(0,0).neighbours[0]);
+		Unit goblin = new Goblin();
+		getHex(0,0).placeUnit(goblin);
+		System.out.println(getHex(0,0).toString());
 	}
 	
 	public Hex[][] getHexArray(){
@@ -163,9 +166,9 @@ public class Board {
 				v = hex.axialCoord.y;
 				x = center.x + (int)Math.floor(horizontalDistance * u);
 				y = center.y + (int)Math.floor(verticalDistance * (u*.5+v));
-
+				
 				Polygon p = createHexagon(x, y, hexRadius);
-							
+				hex.setEuclCoord(x, y);			
 				hex.setShape(p);
 			}
 		}
