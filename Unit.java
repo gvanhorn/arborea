@@ -1,19 +1,22 @@
+import java.awt.Point;
+
 
 public abstract class Unit {
 	int hitpoints;
 	int weaponSkill;
+	Point imageOffset;
 	String name;
-	
+	String owner;
+		
 	Unit(){
-		name = "xxXXmegaTronFinalBoss420BitchXXxx";
-		hitpoints = 10000;
-		weaponSkill = 1000;
+		
 	}
 	
-	Unit(int hp, int ws, String n){
+	Unit(int hp, int ws, String n, String o){
 		hitpoints = hp;
 		weaponSkill = ws;
 		name = n;
+		owner = o;
 	}
 	
 	public void print(){
@@ -22,6 +25,10 @@ public abstract class Unit {
 	
 	public String getName(){
 		return name;
+	}
+	
+	public Point getOffset(){
+		return imageOffset;
 	}
 
 }

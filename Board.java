@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /*
  * www.redblobgames.com/grids/hexagons/
@@ -16,16 +18,16 @@ public class Board {
 	int[] screensize;
 	
 	//Constructor for the board, screensize is the size of the window
-	Board(int[] screensize){
+	Board(int[] screensize, Unit[] units){
 		this.screensize = screensize;
 		palette = new Palette();
 		radius = 4;
-		initBoard();
+		initBoard(units);
 		
 	}
 	
 	//Initialize the board
-	private void initBoard(){
+	private void initBoard(Unit[] units){
 		board = new Hex[2*radius+1][];
 		int rows = radius*2 + 1;
 		int counter = 1;
@@ -89,9 +91,18 @@ public class Board {
 			}
 		}
 		//System.out.println(getHex(0,0).neighbours[0]);
-		Unit goblin = new Goblin();
-		getHex(0,0).placeUnit(goblin);
-		System.out.println(getHex(0,0).toString());
+		try{
+			BufferedReader br = new BufferedReader(new FileReader("initialUnits.txt"));
+			String currentLine;
+			while((currentLine = br.readLine()) != null){
+				String[] stuff = currentLine.split(",");
+				
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public Hex[][] getHexArray(){
