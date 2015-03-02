@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class Arborea {
 	
 	public static void main(String[] args){
-		int[] screensize = {800, 800}; 
+		int[] screensize = {600, 400}; 
 		Board board = new Board(screensize);
 		board.createHexGridGraphics();
 		
