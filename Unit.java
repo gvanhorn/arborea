@@ -4,12 +4,13 @@ import java.awt.Point;
 public abstract class Unit {
 	int hitpoints;
 	int weaponSkill;
+	int weaponSkillModifier;
 	Point imageOffset;
 	String name;
 	String owner;
+
 		
 	Unit(){
-		
 	}
 	
 	Unit(int hp, int ws, String n, String o){

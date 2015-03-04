@@ -2,10 +2,8 @@ To Do:
 
 - Images van units alignen zodat ze goed op het board staan
 
-- Systeem maken waarin aangegeven wordt wat de startposities van units zijn, 
-en deze unit op het board zetten
-
 - Functie om moves te maken
+	Legal actions
  
 - Player systeem
 
@@ -15,5 +13,6 @@ en deze unit op het board zetten
 
 
 Eventueel:
-- Images van units mee scalen met grootte van screen 
+- Images van units mee scalen met grootte van screen
+- Plaatjes omdraaien naar vecht richting 
 - Klikken om units beginpositie neer te zetten.

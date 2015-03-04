@@ -61,9 +61,6 @@ public class Board {
 			}
 		}
 		
-		
-		
-		
 		int i;
 		Point[] neighbourCoords;
 		Hex[] neighbours;
@@ -141,6 +138,7 @@ public class Board {
 			selectedHex = h;
 			selectedHex.color = palette.orange;
 			reColorHexGroup(h.neighbours, palette.lightOrange);
+
 		}
 		if(h == null){
 			selectedHex = null;
