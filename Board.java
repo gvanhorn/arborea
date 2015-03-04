@@ -165,16 +165,18 @@ public class Board {
 			selectedHex.color = palette.green;
 			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
-		if (h != null){
+		
+		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.orange;
-			reColorHexGroup(h.neighbours, palette.lightOrange);
+			reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 		}
-		else{
+		
+		if(h == null){
 			selectedHex = null;
 		}
 	}
-
+	
 	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
 		for(Hex h : group){
@@ -184,6 +186,16 @@ public class Board {
 		}
 	}
 
+	public void moveUnit(Hex from, Hex to){
+		if(!to.occupied){
+			Unit tmp = from.getUnit();
+			from.removeUnit();
+			to.placeUnit(tmp);
+		}else{
+			System.out.println("This hex is already occupied!");
+		}
+	}
+	
 	//Prints the board to console
 	public void print(){
 		for(Hex[] row : board){
