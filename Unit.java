@@ -17,6 +17,7 @@ public abstract class Unit {
 		weaponSkill = ws;
 		name = n;
 		owner = o;
+		imageOffset = new Point(0,0);
 	}
 	
 	public void print(){
