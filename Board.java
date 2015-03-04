@@ -161,36 +161,20 @@ public class Board {
 	
 	//Set a hex to be selected and alter the colors of hexes accordingly.
 	public void setSelected(Hex h){
-		if(selectedHex != null){
+		if (selectedHex != null){
 			selectedHex.color = palette.green;
 			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
-		if(h != null){
+		if (h != null){
 			selectedHex = h;
 			selectedHex.color = palette.orange;
 			reColorHexGroup(h.neighbours, palette.lightOrange);
-
 		}
-		if(h == null){
+		else{
 			selectedHex = null;
 		}
-		
 	}
-	
-//	public Hex[] getUnoccupiedNeighbors(Hex h){
-//		Hex[] neighbours = h.getNeighbours();
-//		List<Hex> unoccupied = new ArrayList<Hex>();
-//		for(Hex n : neighbours){
-//			if(n == null){
-//				Point tmp = n.getAxialCoord();
-//				unoccupied.add(getHex(tmp.x, tmp.y));
-//			}
-//		}
-//		Hex[] array = new Hex[unoccupied.size()];
-//		unoccupied.toArray()
-//		return null;
-//		
-//	}	
+
 	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
 		for(Hex h : group){
@@ -260,5 +244,4 @@ public class Board {
 		return hex;
 		
 	}
-
 }
