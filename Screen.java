@@ -98,7 +98,7 @@ public class Screen extends JLayeredPane{
 		}
 		
 		private void paintUnit(Graphics2D g2, Hex h){
-			System.out.println("We are painting units");
+			//System.out.println("We are painting units");
 			if(h.occupied){
 				switch (h.unit.getName()){
 					case "Goblin":

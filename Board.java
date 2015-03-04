@@ -169,40 +169,12 @@ public class Board {
 		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.orange;
-			reColorHexGroup(getUnOccupiedNeighbours(h), palette.lightOrange);
+			reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 		}
 		
 		if(h == null){
 			selectedHex = null;
 		}
-		
-	}
-	//return an array of neighbouring hexes for h that are not occupied.
-	public Hex[] getUnOccupiedNeighbours(Hex h){
-		Hex[] neighbours = h.getNeighbours();
-		List<Hex> unoccupied = new ArrayList<Hex>();
-		for(Hex n : neighbours){
-			if(n != null && !n.occupied){
-				Point tmp = n.getAxialCoord();
-				unoccupied.add(getHex(tmp.x, tmp.y));
-			}
-		}
-		Hex[] array =  unoccupied.toArray(new Hex[unoccupied.size()]);
-		return array;
-	}
-	
-	//return an array of neighbouring hexes for h that are occupied.	
-	public Hex[] getOccupiedNeighbours(Hex h){
-		Hex[] neighbours = h.getNeighbours();
-		List<Hex> occupied = new ArrayList<Hex>();
-		for(Hex n : neighbours){
-			if(n != null && n.occupied){
-				Point tmp = n.getAxialCoord();
-				occupied.add(getHex(tmp.x, tmp.y));
-			}
-		}
-		Hex[] array =  occupied.toArray(new Hex[occupied.size()]);
-		return array;
 	}
 	
 	//Give a group of hexes a new color
@@ -214,6 +186,16 @@ public class Board {
 		}
 	}
 
+	public void moveUnit(Hex from, Hex to){
+		if(!to.occupied){
+			Unit tmp = from.getUnit();
+			from.removeUnit();
+			to.placeUnit(tmp);
+		}else{
+			System.out.println("This hex is already occupied!");
+		}
+	}
+	
 	//Prints the board to console
 	public void print(){
 		for(Hex[] row : board){

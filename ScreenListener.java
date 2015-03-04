@@ -76,19 +76,30 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		
 		for(Hex[] row: screen.board.board){
 			for(Hex h: row){
-				if(h.occupied && h.shape.contains(x, y)){
-					System.out.println( h.axialCoord);
-					if(screen.board.selectedHex != h){
-						screen.board.setSelected(h);
-					}else{
+				//check which hex is clicked
+				if(h.shape.contains(x,y)){
+					//if the hex contains a unit, select or deselect the hex and repaint the hexPanel
+					if(h.occupied){
+						System.out.println( h.axialCoord);
+						if(screen.board.selectedHex != h){
+							screen.board.setSelected(h);
+						}else{
+							screen.board.setSelected(null);
+						}
+						screen.hexPanel.repaint();
+					//If it is not occupied and a hex was already selected, move the unit that was on selectedHex 
+					//to the new hex and de-select the hex, and repaint the unitPanel.
+					}else if(!h.occupied && screen.board.selectedHex != null){
+						screen.board.moveUnit(screen.board.selectedHex, h);
 						screen.board.setSelected(null);
+						screen.unitPanel.repaint();
 					}
 				}
 				
 			}
 		}
 		
-		screen.repaint();
+		//screen.repaint();
 	}
 
 	@Override
