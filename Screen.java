@@ -10,8 +10,10 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
-	JPanel hexPanel, unitPanel, infoPanel;
-	BufferedImage goblinImg, swordsmanImg;
+
+	JPanel hexPanel, unitPanel;
+	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
+
 	double hexSize;
 	Board board;
 	
@@ -49,6 +51,8 @@ public class Screen extends JLayeredPane{
 		try{
 			goblinImg = ImageIO.read(new File("images/Goblin.png"));
 			swordsmanImg = ImageIO.read(new File("images/Swordsman.png"));
+			orcImg = ImageIO.read(new File("images/Orc.png"));
+			generalImg = ImageIO.read(new File("images/General.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -101,6 +105,12 @@ public class Screen extends JLayeredPane{
 						break;
 					case "Swordsman":
 						g2.drawImage(swordsmanImg, h.euclCoord.x + h.getUnit().getOffset().x, h.euclCoord.y + h.getUnit().getOffset().y, null);
+						break;
+					case "Orc":
+						g2.drawImage(orcImg, h.euclCoord.x + h.getUnit().getOffset().x, h.euclCoord.y + h.getUnit().getOffset().y, null);
+						break;
+					case "General":
+						g2.drawImage(generalImg, h.euclCoord.x + h.getUnit().getOffset().x, h.euclCoord.y + h.getUnit().getOffset().y, null);
 						break;
 					default:
 						System.out.println("No image for this unit");

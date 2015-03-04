@@ -1,3 +1,5 @@
+import java.awt.Point;
+
 
 public class General extends Unit{
 	
@@ -6,6 +8,7 @@ public class General extends Unit{
 		super.weaponSkill = 8;
 		super.name = "General";
 		super.owner = o;
+		super.imageOffset = new Point(-33, -45);
 	}
 
 }

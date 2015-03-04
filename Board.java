@@ -4,6 +4,8 @@ import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * www.redblobgames.com/grids/hexagons/
@@ -23,13 +25,19 @@ public class Board {
 		this.screensize = screensize;
 		palette = new Palette();
 		radius = 4;
-		initBoard(units);
-		
+		initBoard(units);	
 	}
 	
 	//Initialize the board
 	private void initBoard(Unit[] units){
 		board = new Hex[2*radius+1][];
+		setupHexes();
+		setupNeighbors();
+		setupUnits();
+	}
+	
+	//Create the Hex objects and fill the board array
+	private void setupHexes(){
 		int rows = radius*2 + 1;
 		int counter = 1;
 		int rowLength;
@@ -60,17 +68,19 @@ public class Board {
 				board[i][j] = new Hex(q, r, palette.green);
 			}
 		}
-		
+	}
+	
+	//Setup an array (length 6) of neighbors for each hex, if there is no neighbor, put null. 
+	private void setupNeighbors(){
 		int i;
 		Point[] neighbourCoords;
 		Hex[] neighbours;
-		
 		//Put references to neighbors in each hex
 		for(Hex[] row : board){
 			for(Hex h: row){
 				
 				//Get the axial coordinates of the neighbors for the current hex
-				neighbourCoords = h.getAdjacent();
+				neighbourCoords = getAdjacent(h);
 				neighbours = new Hex[6];
 				
 				i=0;
@@ -88,7 +98,23 @@ public class Board {
 				h.neighbours = neighbours;
 			}
 		}
+	}
+	
+	public Point[] getAdjacent(Hex h){
+		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
+		Point[] adjacent = new Point[6];
+		int i=0;
+		for(int[] direction : directions){
+			Point tmp = new Point(h.axialCoord.x + direction[0], h.axialCoord.y + direction[1]);
+			adjacent[i] = tmp;
+			i++;
+		}
 		
+		return adjacent;
+	}
+	
+	//Read the file initialUnits.txt and set them on the board.
+	private void setupUnits(){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
 			File f = new File("initialUnits");
@@ -103,24 +129,29 @@ public class Board {
 				x = Integer.parseInt(stuff[2]);
 				y = Integer.parseInt(stuff[3]);
 				
+				switch (type){
+					case "Goblin":
+						getHex(x, y).placeUnit(new Goblin(owner));
+						break;
+					case "Swordsman":
+						getHex(x, y).placeUnit(new Swordsman(owner));
+						break;
+					case "Orc":
+						getHex(x, y).placeUnit(new Orc(owner));
+						break;
+					case "General":
+						getHex(x, y).placeUnit(new General(owner));
+						break;
+					default:
+						System.out.println("Did not recognize the type: "  + type + " when placing units on the board.");
 				
-				if (type.equals("Goblin")){
-					getHex(x, y).placeUnit(new Goblin(owner));
-				}else if(type.equals("Swordsman")){
-					getHex(x, y).placeUnit(new Swordsman(owner));
 				}
+				
 			}
 			br.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
-		
-	}
-	
-	public Hex[][] getHexArray(){
-		return board;
 	}
 	
 	//q and r are array indexes and returns the hex at that array index. 
@@ -146,6 +177,20 @@ public class Board {
 		
 	}
 	
+//	public Hex[] getUnoccupiedNeighbors(Hex h){
+//		Hex[] neighbours = h.getNeighbours();
+//		List<Hex> unoccupied = new ArrayList<Hex>();
+//		for(Hex n : neighbours){
+//			if(n == null){
+//				Point tmp = n.getAxialCoord();
+//				unoccupied.add(getHex(tmp.x, tmp.y));
+//			}
+//		}
+//		Hex[] array = new Hex[unoccupied.size()];
+//		unoccupied.toArray()
+//		return null;
+//		
+//	}	
 	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
 		for(Hex h : group){
