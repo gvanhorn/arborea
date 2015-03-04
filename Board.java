@@ -165,32 +165,46 @@ public class Board {
 			selectedHex.color = palette.green;
 			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
+		
 		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.orange;
-			reColorHexGroup(h.neighbours, palette.lightOrange);
-
+			reColorHexGroup(getUnOccupiedNeighbours(h), palette.lightOrange);
 		}
+		
 		if(h == null){
 			selectedHex = null;
 		}
 		
 	}
+	//return an array of neighbouring hexes for h that are not occupied.
+	public Hex[] getUnOccupiedNeighbours(Hex h){
+		Hex[] neighbours = h.getNeighbours();
+		List<Hex> unoccupied = new ArrayList<Hex>();
+		for(Hex n : neighbours){
+			if(n != null && !n.occupied){
+				Point tmp = n.getAxialCoord();
+				unoccupied.add(getHex(tmp.x, tmp.y));
+			}
+		}
+		Hex[] array =  unoccupied.toArray(new Hex[unoccupied.size()]);
+		return array;
+	}
 	
-//	public Hex[] getUnoccupiedNeighbors(Hex h){
-//		Hex[] neighbours = h.getNeighbours();
-//		List<Hex> unoccupied = new ArrayList<Hex>();
-//		for(Hex n : neighbours){
-//			if(n == null){
-//				Point tmp = n.getAxialCoord();
-//				unoccupied.add(getHex(tmp.x, tmp.y));
-//			}
-//		}
-//		Hex[] array = new Hex[unoccupied.size()];
-//		unoccupied.toArray()
-//		return null;
-//		
-//	}	
+	//return an array of neighbouring hexes for h that are occupied.	
+	public Hex[] getOccupiedNeighbours(Hex h){
+		Hex[] neighbours = h.getNeighbours();
+		List<Hex> occupied = new ArrayList<Hex>();
+		for(Hex n : neighbours){
+			if(n != null && n.occupied){
+				Point tmp = n.getAxialCoord();
+				occupied.add(getHex(tmp.x, tmp.y));
+			}
+		}
+		Hex[] array =  occupied.toArray(new Hex[occupied.size()]);
+		return array;
+	}
+	
 	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
 		for(Hex h : group){
