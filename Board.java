@@ -30,6 +30,13 @@ public class Board {
 	//Initialize the board
 	private void initBoard(Unit[] units){
 		board = new Hex[2*radius+1][];
+		setupHexes();
+		setupNeighbors();
+		setupUnits();
+	}
+	
+	//Create the Hex objects and fill the board array
+	private void setupHexes(){
 		int rows = radius*2 + 1;
 		int counter = 1;
 		int rowLength;
@@ -60,14 +67,13 @@ public class Board {
 				board[i][j] = new Hex(q, r, palette.green);
 			}
 		}
-		
-		
-		
-		
+	}
+	
+	//Setup an array (length 6) of neighbors for each hex, if there is no neighbor, put null. 
+	private void setupNeighbors(){
 		int i;
 		Point[] neighbourCoords;
 		Hex[] neighbours;
-		
 		//Put references to neighbors in each hex
 		for(Hex[] row : board){
 			for(Hex h: row){
@@ -91,7 +97,10 @@ public class Board {
 				h.neighbours = neighbours;
 			}
 		}
-		
+	}
+	
+	//Read the file initialUnits.txt and set them on the board.
+	private void setupUnits(){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
 			File f = new File("initialUnits");
@@ -106,21 +115,31 @@ public class Board {
 				x = Integer.parseInt(stuff[2]);
 				y = Integer.parseInt(stuff[3]);
 				
+				switch (type){
+					case "Goblin":
+						getHex(x, y).placeUnit(new Goblin(owner));
+						break;
+					case "Swordsman":
+						getHex(x, y).placeUnit(new Swordsman(owner));
+						break;
+					case "Orc":
+						getHex(x, y).placeUnit(new Orc(owner));
+						break;
+					case "General":
+						getHex(x, y).placeUnit(new General(owner));
+						break;
+					default:
+						System.out.println("Did not recognize the type: "  + type + " when placing units on the board.");
 				
-				if (type.equals("Goblin")){
-					getHex(x, y).placeUnit(new Goblin(owner));
-				}else if(type.equals("Swordsman")){
-					getHex(x, y).placeUnit(new Swordsman(owner));
 				}
+				
 			}
 			br.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
+	
 	
 	public Hex[][] getHexArray(){
 		return board;
