@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class Screen extends JLayeredPane{
 		
 		this.add(hexPanel, this.DEFAULT_LAYER);
 		this.add(unitPanel, this.PALETTE_LAYER);
-		this.add(unitPanel, this.MODAL_LAYER);
+		//this.add(infoPanel, this.MODAL_LAYER);
 		this.setDoubleBuffered(true);		
 		
 		unitPanel.setOpaque(false);
@@ -67,6 +66,7 @@ public class Screen extends JLayeredPane{
 		
 		@Override
 		public void paintComponent(Graphics g){
+			System.out.println("Painting hexes");
 			Graphics2D g2 = (Graphics2D) g;
 			for(Hex[] row : board.board){
 				for(Hex hex : row){
@@ -87,6 +87,7 @@ public class Screen extends JLayeredPane{
 	
 		@Override
 		public void paintComponent(Graphics g){
+			System.out.println("Painting units");
 			Graphics2D g2 = (Graphics2D) g;
 			for(Hex[] row : board.board){
 				for(Hex hex : row){
