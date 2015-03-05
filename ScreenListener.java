@@ -87,6 +87,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 							screen.board.setSelected(null);
 						}
 						screen.hexPanel.repaint();
+						
 					//If it is not occupied and a hex was already selected, move the unit that was on selectedHex 
 					//to the new hex and de-select the hex, and repaint the unitPanel.
 					}else if(!h.occupied && screen.board.selectedHex != null){
