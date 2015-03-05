@@ -83,8 +83,10 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 						System.out.println( h.axialCoord);
 						if(screen.board.selectedHex != h){
 							screen.board.setSelected(h);
+							screen.updateLabel();
 						}else{
 							screen.board.setSelected(null);
+							screen.updateLabel();
 						}
 						screen.hexPanel.repaint();
 						

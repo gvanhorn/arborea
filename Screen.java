@@ -10,7 +10,9 @@ import javax.swing.*;
 public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
 
-	JPanel hexPanel, unitPanel;
+	JPanel hexPanel, unitPanel, infoPanel;
+	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel;
+	// infoLabel myInfoLabel;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
 
 	double hexSize;
@@ -25,28 +27,40 @@ public class Screen extends JLayeredPane{
 		
 		hexPanel = new hexPanel();
 		unitPanel = new unitPanel();
-		// infoPanel = new infoPanel();
+		infoPanel = new JPanel();
+
+		unitNameLabel = new JLabel();
+		hitPointsLabel = new JLabel();
+		weaponSkillLabel = new JLabel();
 		
 		this.setPreferredSize(dim);
 		
 		hexPanel.setPreferredSize(dim);
 		unitPanel.setPreferredSize(dim);
-		// infoPanel.setPreferredSize(new Dimension(200,150));
 		
 		hexPanel.setBounds(0, 0, screensize[0], screensize[1]);
 		unitPanel.setBounds(0, 0, screensize[0], screensize[1]);
-		// infoPanel.setBounds(30, 70, 30+200, 70+150);
+		infoPanel.setBounds(10, 10, 150, 100);
 		
-		this.add(hexPanel, this.DEFAULT_LAYER);
-		this.add(unitPanel, this.PALETTE_LAYER);
-		//this.add(infoPanel, this.MODAL_LAYER);
 		this.setDoubleBuffered(true);		
 		
 		unitPanel.setOpaque(false);
 		hexPanel.setOpaque(true);
-		// infoPanel.setOpaque(false);
+		infoPanel.setOpaque(true);
+		// infoPanel.setLayout(new FlowLayout()); 
+
+		infoPanel.add(unitNameLabel);
+		infoPanel.add(hitPointsLabel);
+		infoPanel.add(weaponSkillLabel);
+
 		
+		infoPanel.setBackground(board.palette.lightGreen);
 		hexPanel.setBackground(board.palette.white);
+		
+		this.add(hexPanel, this.DEFAULT_LAYER);
+		this.add(unitPanel, this.PALETTE_LAYER);
+		this.add(infoPanel, this.MODAL_LAYER);
+
 		try{
 			goblinImg = ImageIO.read(new File("images/Goblin.png"));
 			swordsmanImg = ImageIO.read(new File("images/Swordsman.png"));
@@ -66,11 +80,9 @@ public class Screen extends JLayeredPane{
 		
 		@Override
 		public void paintComponent(Graphics g){
-			System.out.println("Painting hexes");
 			Graphics2D g2 = (Graphics2D) g;
 			for(Hex[] row : board.board){
 				for(Hex hex : row){
-					//hex.paint(g);
 					paintHex(g2, hex);
 				}
 			}
@@ -87,18 +99,15 @@ public class Screen extends JLayeredPane{
 	
 		@Override
 		public void paintComponent(Graphics g){
-			System.out.println("Painting units");
 			Graphics2D g2 = (Graphics2D) g;
 			for(Hex[] row : board.board){
 				for(Hex hex : row){
-					//hex.paint(g);
 					paintUnit(g2, hex);
 				}
 			}
 		}
 		
 		private void paintUnit(Graphics2D g2, Hex h){
-			//System.out.println("We are painting units");
 			if(h.occupied){
 				switch (h.unit.getName()){
 					case "Goblin":
@@ -121,19 +130,20 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
-	// private class infoPanel extends JPanel{
-	// 	public void paintComponent(Graphics g){
-	// 		super.paintComponent(g);
-	// 	}
 
 
-	// 	private void createInfoPanel(Graphics g, Hex h){
-	// 		Graphics2D g2 = (Graphics2D) g;
-	// 		g2.drawRect (30, 70, 200, 150);  
-	// 		g2.drawString(h.unit.name, 35, 75);
-	// 		g2.drawString("HP: " + Integer.toString(h.unit.hitpoints), 35, 100);
-	// 		g2.drawString("Weaponskill: " + Integer.toString(h.unit.weaponSkill) + "+ " + Integer.toString(h.unit.weaponSkillModifier), 35, 125);
-	// 	}
-	// }
+	public void updateLabel(){
+		if (board.selectedHex != null) {
+			Hex h = board.selectedHex;
+			unitNameLabel.setText(h.unit.name);
+			hitPointsLabel.setText("HP: " + Integer.toString(h.unit.hitpoints));
+			weaponSkillLabel.setText("Weapon Skill: " + Integer.toString(h.unit.weaponSkill) + " + " + Integer.toString(h.unit.weaponSkillModifier));
 
+		}
+		else{
+			unitNameLabel.setText("");
+			hitPointsLabel.setText("");
+			weaponSkillLabel.setText("");
+		}
+	}
 }

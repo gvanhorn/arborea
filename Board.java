@@ -161,7 +161,7 @@ public class Board {
 	
 	//Set a hex to be selected and alter the colors of hexes accordingly.
 	public void setSelected(Hex h){
-		if(selectedHex != null){
+		if (selectedHex != null){
 			selectedHex.color = palette.green;
 			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
@@ -256,5 +256,4 @@ public class Board {
 		return hex;
 		
 	}
-
 }
