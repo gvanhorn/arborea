@@ -211,6 +211,7 @@ public class Board {
 			selectedHex = h;
 			selectedHex.color = palette.orange;
 			reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
+			reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
 		}
 		
 		if(h == null){

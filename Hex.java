@@ -107,6 +107,17 @@ public class Hex {
 		Hex[] array =  occupied.toArray(new Hex[occupied.size()]);
 		return array;
 	}
+	
+	public Hex[] getEnemyOccupiedNeighbours(){
+		List<Hex> occupied = new ArrayList<Hex>();
+		for(Hex n : neighbours){
+			if(n != null && n.occupied && !n.getUnit().owner.equals(unit.owner)){
+				occupied.add(n);
+			}
+		}
+		Hex[] array =  occupied.toArray(new Hex[occupied.size()]);
+		return array;
+	}
 
 	
 	public String toString(){

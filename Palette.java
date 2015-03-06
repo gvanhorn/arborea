@@ -7,6 +7,7 @@ public class Palette {
 	Color lightOrange;
 	Color white;
 	Color lightGreen;
+	Color red;
 	
 	Palette(){
 		green = new Color(0x19A347);
@@ -14,6 +15,7 @@ public class Palette {
 		lightOrange = new Color(0xFFCB59);
 		white = Color.WHITE;
 		lightGreen = new Color(0x1FED64);
+		red = Color.red;
 	}
 
 }
