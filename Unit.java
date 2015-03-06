@@ -1,4 +1,6 @@
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class Unit {
@@ -59,6 +61,16 @@ public abstract class Unit {
 			}
 		}
 		this.updateModifier(wsm);
+	}
+	
+	public List<Unit> getAdjacentUnits(){
+		List<Unit> units = new ArrayList<Unit>();
+		for(Hex h : position.neighbours){
+			if(h.occupied){
+				units.add(h.getUnit());
+			}
+		}
+		return units;
 	}
 	
 	public void print(){

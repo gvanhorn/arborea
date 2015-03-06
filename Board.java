@@ -235,6 +235,11 @@ public class Board {
 			to.placeUnit(tmp);
 			tmp.setPosition(to);
 			tmp.updateModifier();
+			
+			for(Unit u : tmp.getAdjacentUnits()){
+				u.updateModifier();
+			}
+			
 		}else{
 			System.out.println("Illegal move!");
 		}
