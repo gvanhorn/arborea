@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class Board {
 	Hex[][] board;
+	List<Unit> units;
 	int radius;
 	int range;
 	Hex selectedHex;
@@ -21,16 +23,17 @@ public class Board {
 	int[] screensize;
 	
 	//Constructor for the board, screensize is the size of the window
-	Board(int[] screensize, Unit[] units){
+	Board(int[] screensize){
 		this.screensize = screensize;
 		palette = new Palette();
 		radius = 4;
-		initBoard(units);	
+		initBoard();	
 	}
 	
 	//Initialize the board
-	private void initBoard(Unit[] units){
+	private void initBoard(){
 		board = new Hex[2*radius+1][];
+		units = new ArrayList<Unit>();
 		setupHexes();
 		setupNeighbors();
 		setupUnits();
@@ -100,18 +103,6 @@ public class Board {
 		}
 	}
 	
-	public Point[] getAdjacent(Hex h){
-		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
-		Point[] adjacent = new Point[6];
-		int i=0;
-		for(int[] direction : directions){
-			Point tmp = new Point(h.axialCoord.x + direction[0], h.axialCoord.y + direction[1]);
-			adjacent[i] = tmp;
-			i++;
-		}
-		
-		return adjacent;
-	}
 	
 	//Read the file initialUnits.txt and set them on the board.
 	private void setupUnits(){
@@ -128,29 +119,79 @@ public class Board {
 				owner = stuff[1];
 				x = Integer.parseInt(stuff[2]);
 				y = Integer.parseInt(stuff[3]);
+				Hex h = getHex(x,y);
+				Unit u = null;
+				
 				
 				switch (type){
 					case "Goblin":
-						getHex(x, y).placeUnit(new Goblin(owner));
+						u = new Goblin(owner);
 						break;
 					case "Swordsman":
-						getHex(x, y).placeUnit(new Swordsman(owner));
+						u = new Swordsman(owner);
 						break;
 					case "Orc":
-						getHex(x, y).placeUnit(new Orc(owner));
+						u = new Orc(owner);
 						break;
 					case "General":
-						getHex(x, y).placeUnit(new General(owner));
+						u = new General(owner);
 						break;
 					default:
 						System.out.println("Did not recognize the type: "  + type + " when placing units on the board.");
 				
 				}
 				
+				if(u != null){
+					u.setPosition(h);
+					h.placeUnit(u);
+					units.add(u);
+				}
 			}
 			br.close();
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+		setWSModifiers();
+	}
+	
+	public Point[] getAdjacent(Hex h){
+		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
+		Point[] adjacent = new Point[6];
+		int i=0;
+		for(int[] direction : directions){
+			Point tmp = new Point(h.axialCoord.x + direction[0], h.axialCoord.y + direction[1]);
+			adjacent[i] = tmp;
+			i++;
+		}
+		
+		return adjacent;
+	}
+	
+	public void setWSModifiers(){
+		for(Unit u: units){
+			int wsm = 0;
+			Unit adj; 
+			for(Hex h : u.getPosition().getNeighbours()){
+				if(h != null){
+					if(h.occupied){
+						adj = h.getUnit();
+						if(adj.owner.equals(u.owner)){
+							if(adj instanceof General || adj instanceof Orc){
+								wsm += 2;
+							}else{
+								wsm++;
+							}
+						}else{
+							if(adj instanceof General || adj instanceof Orc){
+								wsm -= 2;
+							}else{
+								wsm--;
+							}
+						}
+					}
+				}
+			}
+			u.updateModifier(wsm);
 		}
 	}
 	
@@ -187,12 +228,14 @@ public class Board {
 	}
 
 	public void moveUnit(Hex from, Hex to){
-		if(!to.occupied){
+		if(!to.occupied && Arrays.asList(from.neighbours).contains(to)){
 			Unit tmp = from.getUnit();
 			from.removeUnit();
 			to.placeUnit(tmp);
+			tmp.setPosition(to);
+			tmp.updateModifier();
 		}else{
-			System.out.println("This hex is already occupied!");
+			System.out.println("Illegal move!");
 		}
 	}
 	

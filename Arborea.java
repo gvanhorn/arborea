@@ -6,7 +6,7 @@ public class Arborea {
 	
 	public static void main(String[] args){		
 		
-		Unit[] units = {new Goblin("human"), new Swordsman("cpu")};
+		//Unit[] units = {new Goblin("human"), new Swordsman("cpu")};
 		
 		Player human = new Player();
 		Player cpu = new Player();
@@ -18,7 +18,7 @@ public class Arborea {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
-		Board board = new Board(screensize, units);
+		Board board = new Board(screensize);
 		board.createHexGridGraphics();
 		
 		Screen screen = new Screen(board, screensize);
