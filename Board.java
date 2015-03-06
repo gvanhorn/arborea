@@ -305,4 +305,9 @@ public class Board {
 		return hex;
 		
 	}
+
+	public Hex getSelectedHex() {
+		// TODO Auto-generated method stub
+		return selectedHex;
+	}
 }

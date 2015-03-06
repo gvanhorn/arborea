@@ -1,6 +1,7 @@
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public abstract class Unit {
@@ -74,6 +75,17 @@ public abstract class Unit {
 	}
 	
 	public void attack(Unit u){
+		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill - u.weaponSkillModifier)))));
+		Random rnd = new Random();
+		if(rnd.nextFloat()<hitChance){
+			u.hitpoints--;
+			System.out.println("Attack Hit!");
+			if(u.hitpoints == 0){
+				u.getPosition().removeUnit();
+			}
+		}else{
+			System.out.println("Attack Missed!");
+		}
 		
 	}
 	
