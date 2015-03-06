@@ -66,11 +66,15 @@ public abstract class Unit {
 	public List<Unit> getAdjacentUnits(){
 		List<Unit> units = new ArrayList<Unit>();
 		for(Hex h : position.neighbours){
-			if(h.occupied){
+			if(h != null && h.occupied){
 				units.add(h.getUnit());
 			}
 		}
 		return units;
+	}
+	
+	public void attack(Unit u){
+		
 	}
 	
 	public void print(){
