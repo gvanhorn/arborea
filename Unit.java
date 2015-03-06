@@ -74,7 +74,7 @@ public abstract class Unit {
 		return units;
 	}
 	
-	public void attack(Unit u){
+	public boolean attack(Unit u){
 		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill - u.weaponSkillModifier)))));
 		Random rnd = new Random();
 		if(rnd.nextFloat()<hitChance){
@@ -83,8 +83,10 @@ public abstract class Unit {
 			if(u.hitpoints == 0){
 				u.getPosition().removeUnit();
 			}
+			return true;
 		}else{
 			System.out.println("Attack Missed!");
+			return false;
 		}
 		
 	}
