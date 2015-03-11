@@ -79,6 +79,7 @@ public abstract class Unit implements java.io.Serializable{
 	}
 	
 	public boolean attack(Unit u){
+		
 		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill + u.weaponSkillModifier)))));
 		System.out.println(hitChance);
 		Random rnd = new Random();
@@ -93,12 +94,19 @@ public abstract class Unit implements java.io.Serializable{
 		}else{
 			System.out.println("Attack Missed!");
 			return false;
-		}	
+		}
 	}
+		
+	
 	
 	public void move(Hex to){
 		if(!to.occupied && Arrays.asList(position.neighbours).contains(to) && !moved){
 			position.removeUnit();
+			
+			for(Hex adj : position.getOccupiedNeighbours()){
+				adj.getUnit().updateModifier();
+			}
+			
 			to.placeUnit(this);
 			this.setPosition(to);
 			this.updateModifier();
