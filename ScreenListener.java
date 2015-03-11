@@ -81,48 +81,14 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 				//check which hex is clicked
 				if(h.shape.contains(x,y)){
 					//If the selected hex is occupied and no hex was selected before, select the hex
-					if(h.occupied && b.getSelectedHex()==null){
-						b.setSelected(h);
-						screen.updateLabel();
-						screen.hexPanel.repaint();
-						System.out.println("hex selected");
-					//If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it
-					}else if((h.occupied && h != b.selectedHex 
-							&& h.getUnit().owner.equals(b.selectedHex.getUnit().owner)
-							&& b.selectedHex.getUnit().owner.equals("human"))
-							|| (b.selectedHex.getUnit().owner.equals("cpu")
-								&& h.getUnit().owner.equals("human"))){
-						b.setSelected(h);
-						screen.updateLabel();
-						screen.hexPanel.repaint();
-						System.out.println("New hex selected");
-					//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
-					}else if(h.occupied && b.selectedHex != null 
-							&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)
-							&& screen.board.human.turn
-							&& b.selectedHex.unit.owner.equals("human")
-							&& b.selectedHex.getUnit().getAdjacentUnits().contains(h)){
-						b.selectedHex.getUnit().attack(h.getUnit());
-						b.setSelected(null);
-						screen.repaint();
-						System.out.println("Unit attacked and hex deselected");
-					//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
-					}else if(!h.occupied && b.selectedHex != null && h != b.selectedHex
-							&& b.getSelectedHex().getUnit().owner.equals("human")
-							&& screen.board.human.turn
-							&& b.selectedHex.unit.owner.equals("human")){
-						b.selectedHex.getUnit().move(h);
-						b.setSelected(null);
-						screen.unitPanel.repaint();
-						System.out.println("Unit moved and hex deselected");
-					//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
-					}else if(h.occupied && b.selectedHex!=null && h == b.selectedHex){
-						b.setSelected(null);
-						screen.hexPanel.repaint();
-						System.out.println("Hex deselected");
-					}
+					Hex selectedHex = b.selectedHex;
+					Hex clickedHex = h;
 					
-					
+					if(selectHex(selectedHex, clickedHex, screen)){}
+					else if(selectOtherHex(selectedHex, clickedHex, screen)){}
+					else if(attackHex(selectedHex, clickedHex, screen)){}
+					else if(move(selectedHex, clickedHex, screen)){}
+					else if(deselect(selectedHex, clickedHex, screen)){}
 				}
 				
 			}
@@ -131,6 +97,89 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		
 		//System.out.println("Mouse click event took: " +  (end-start) +  " milliseconds");
 		//screen.repaint();
+	}
+	
+	//If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it
+	public Boolean selectHex(Hex selected, Hex clicked, Screen s){
+		if(clicked.occupied && selected ==null){
+			s.board.setSelected(clicked);
+			s.updateLabel();
+			s.hexPanel.repaint();
+			System.out.println("hex selected");
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
+	public Boolean selectOtherHex(Hex selected, Hex clicked, Screen s){
+		if(clicked.getUnit() != null){
+			if((clicked.occupied && clicked != selected && sameOwner(selected, clicked))
+					|| (selected.getUnit().owner.equals("cpu")
+						&& clicked.getUnit().owner.equals("human"))
+					|| (selected.getUnit().owner.equals("human")
+						&& !selected.adjacentTo(clicked))){
+				s.board.setSelected(clicked);
+				s.updateLabel();
+				s.hexPanel.repaint();
+				System.out.println("New hex selected");
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+	
+	//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
+	public Boolean attackHex(Hex selected, Hex clicked, Screen screen){
+		//System.out.println("Attempt at attacking");
+		if(clicked.occupied && selected != null 
+				&&  !sameOwner(selected, clicked)
+				&& screen.board.human.getTurn()
+				&& selected.unit.owner.equals("human")
+				&& selected.adjacentTo(clicked)){
+			
+			selected.getUnit().attack(clicked.getUnit());
+			screen.board.setSelected(null);
+			screen.repaint();
+			System.out.println("Unit attacked and hex deselected");
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean move(Hex selected, Hex clicked, Screen screen){
+		if(!clicked.occupied && selected != null && clicked != selected
+				&& selected.getUnit().owner.equals("human")
+				&& screen.board.human.turn
+				&& selected.unit.owner.equals("human")){
+			
+			selected.getUnit().move(clicked);
+			screen.board.setSelected(null);
+			screen.unitPanel.repaint();
+			System.out.println("Unit moved and hex deselected");
+			return true;
+			
+		}else{
+			return false;
+		}
+	}
+	
+	//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
+	public boolean deselect(Hex selected, Hex clicked, Screen screen){
+		if(clicked.occupied && selected!=null && clicked == selected){
+			screen.board.setSelected(null);
+			screen.hexPanel.repaint();
+			System.out.println("Hex deselected");
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public Boolean sameOwner(Hex h1, Hex h2){

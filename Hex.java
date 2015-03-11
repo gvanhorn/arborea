@@ -119,6 +119,14 @@ public class Hex implements java.io.Serializable{
 		return array;
 	}
 
+	public boolean adjacentTo(Hex h){
+		for(Hex n : neighbours){
+			if(h == n){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public String toString(){
 		if(occupied){
