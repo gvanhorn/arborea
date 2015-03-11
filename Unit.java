@@ -79,7 +79,8 @@ public abstract class Unit {
 	}
 	
 	public boolean attack(Unit u){
-		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill - u.weaponSkillModifier)))));
+		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill + u.weaponSkillModifier)))));
+		System.out.println(hitChance);
 		Random rnd = new Random();
 		attacked = true;
 		if(rnd.nextFloat()<hitChance){
