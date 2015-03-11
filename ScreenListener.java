@@ -69,6 +69,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		long start = System.currentTimeMillis();
 		int x = e.getX();
 		int y = e.getY();
 		//System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
@@ -117,7 +118,9 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 				
 			}
 		}
+		long end = System.currentTimeMillis();
 		
+		System.out.println("Mouse click event took: " +  (end-start) +  " milliseconds");
 		//screen.repaint();
 	}
 
