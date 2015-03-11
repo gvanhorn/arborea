@@ -1,7 +1,4 @@
-import java.awt.Point;
 import java.awt.event.*;
-
-import javax.swing.JFrame;
 
 public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener{
 	
@@ -92,7 +89,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 						screen.updateLabel();
 						screen.hexPanel.repaint();
 						System.out.println("New hex selected");
-					//If the selected hex is occupied, a hex was already selected, they are not the same, and have a different owner, attack it
+					//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 					}else if(h.occupied && b.selectedHex != null 
 						&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)){
 						b.selectedHex.getUnit().attack(h.getUnit());
@@ -102,10 +99,9 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
 					}else if(!h.occupied && b.selectedHex != null && h != b.selectedHex
 							&& b.getSelectedHex().getUnit().owner.equals("human")){
-						b.moveUnit(screen.board.selectedHex, h);
+						b.selectedHex.getUnit().move(h);
 						b.setSelected(null);
 						screen.unitPanel.repaint();
-						System.out.println("Unit moved");
 					//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
 					}else if(h.occupied && b.selectedHex!=null && h == b.selectedHex){
 						b.setSelected(null);

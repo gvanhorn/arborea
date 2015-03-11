@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ public abstract class Unit {
 	String name;
 	String owner;
 	private Hex position;
+	boolean moved, attacked;
 
 		
 	Unit(){
@@ -24,6 +26,8 @@ public abstract class Unit {
 		name = n;
 		owner = o;
 		imageOffset = new Point(0,0);
+		attacked = false;
+		moved = false;
 	}
 	
 	public void setPosition(Hex h){
@@ -77,6 +81,7 @@ public abstract class Unit {
 	public boolean attack(Unit u){
 		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill - u.weaponSkillModifier)))));
 		Random rnd = new Random();
+		attacked = true;
 		if(rnd.nextFloat()<hitChance){
 			u.hitpoints--;
 			System.out.println("Attack Hit!");
@@ -87,8 +92,24 @@ public abstract class Unit {
 		}else{
 			System.out.println("Attack Missed!");
 			return false;
+		}	
+	}
+	
+	public void move(Hex to){
+		if(!to.occupied && Arrays.asList(position.neighbours).contains(to) && !moved){
+			position.removeUnit();
+			to.placeUnit(this);
+			this.setPosition(to);
+			this.updateModifier();
+			
+			for(Unit u : getAdjacentUnits()){
+				u.updateModifier();
+			}
+			moved = true;
+			System.out.println("Unit moved");
+		}else{
+			System.out.println("Illegal move!");
 		}
-		
 	}
 	
 	public void print(){

@@ -10,19 +10,20 @@ import javax.swing.*;
 public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
 
-	JPanel hexPanel, unitPanel, infoPanel, topPanel;
+	JPanel hexPanel, unitPanel, infoPanel, endTurnPanel;
 	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel;
 	JButton endTurnButton;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
 
 	double hexSize;
 	Board board;
-	
+	Player human;
 	/*
 	 * 
 	 */
-	Screen(Board providedBoard, int[] screensize){
+	Screen(Board providedBoard, int[] screensize, Player p){
 		board = providedBoard;
+		human = p;
 		Dimension dim = new Dimension(screensize[0], screensize[1]);
 		setupPanels(dim);
 		loadImages();
@@ -48,7 +49,8 @@ public class Screen extends JLayeredPane{
 		hexPanel = new hexPanel();
 		unitPanel = new unitPanel();
 		infoPanel = new JPanel();
-		topPanel = new JPanel();
+		endTurnPanel = new JPanel();
+		
 
 		// Create unit info labels
 		unitNameLabel = new JLabel("", SwingConstants.LEFT);
@@ -63,22 +65,20 @@ public class Screen extends JLayeredPane{
 		this.setPreferredSize(dim);
 		hexPanel.setPreferredSize(dim);
 		unitPanel.setPreferredSize(dim);
-		topPanel.setPreferredSize(dim);
+		endTurnPanel.setPreferredSize(dim);
+		
 		
 		hexPanel.setBounds(0, 0, dim.width, dim.height);
 		unitPanel.setBounds(0, 0, dim.width, dim.height);
 		infoPanel.setBounds(10, 10, 150, 100);
-		topPanel.setBounds(0, 0, dim.width, dim.height);
-		
-		// Enable double buffering
-		this.setDoubleBuffered(true);		
+		endTurnPanel.setBounds(0, 0, dim.width, dim.height);
 		
 		// Set translucency of panels
 		unitPanel.setOpaque(false);
 		hexPanel.setOpaque(true);
 		infoPanel.setOpaque(true);
-		topPanel.setOpaque(false);
-
+		endTurnPanel.setOpaque(false);
+		
 		// Create layout for unit info label
 
 		infoPanel.setLayout(new GridBagLayout());
@@ -96,26 +96,35 @@ public class Screen extends JLayeredPane{
 		
 		c.gridy = 2;
 		infoPanel.add(weaponSkillLabel, c);
-
+		
 		// Set background color of panels
 		infoPanel.setBackground(board.palette.lightGreen);
 		hexPanel.setBackground(board.palette.white);
 
 		//create end turn button
 		endTurnButton = new JButton("End turn");
-		endTurnButton.addActionListener(new ButtonListener());
+		endTurnButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e){
+				System.out.println("End turn clicked");
+				human.setTurn(false);
+			}
+		});
 		endTurnButton.setLocation(dim.width - (100 + 40), dim.height - (60 + 40));
 		// endTurnButton.setBounds(630, 680, dim.width - 20, dim.height - 20);
 		endTurnButton.setLayout(null);
 		endTurnButton.setSize(100, 60);
-		topPanel.setLayout(null);
-		topPanel.add(endTurnButton);
+		endTurnPanel.setLayout(null);
+		endTurnPanel.add(endTurnButton);
 		
 		// add panels to layeredPane
-		this.add(hexPanel, this.DEFAULT_LAYER);
-		this.add(unitPanel, this.PALETTE_LAYER);
-		this.add(infoPanel, this.MODAL_LAYER);
-		this.add(topPanel, this.DRAG_LAYER);
+		this.add(hexPanel, JLayeredPane.DEFAULT_LAYER);
+		this.add(unitPanel, JLayeredPane.PALETTE_LAYER);
+		this.add(infoPanel, JLayeredPane.MODAL_LAYER);
+		this.add(endTurnPanel, JLayeredPane.DRAG_LAYER);
+		
+		// Enable double buffering
+		this.setDoubleBuffered(true);	
 	}
 	
 	@Override
@@ -196,4 +205,5 @@ public class Screen extends JLayeredPane{
 			weaponSkillLabel.setText("");
 		}
 	}
+	
 }

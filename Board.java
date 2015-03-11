@@ -202,18 +202,26 @@ public class Board {
 	
 	//Set a hex to be selected and alter the colors of hexes accordingly.
 	public void setSelected(Hex h){
+		
+		//recolor the previously selected hex to default colors
 		if (selectedHex != null){
 			selectedHex.color = palette.green;
 			reColorHexGroup(selectedHex.neighbours, palette.green);
 		}
 		
+		//Color the newly selected hex and its neighbours
 		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.darkGreen;
-			reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
-			reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
+			if(!h.getUnit().moved){
+				reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
+			}
+			if(!h.getUnit().attacked){
+				reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
+			}
 		}
 		
+		//Deselect a hex
 		if(h == null){
 			selectedHex = null;
 		}
@@ -228,22 +236,7 @@ public class Board {
 		}
 	}
 
-	public void moveUnit(Hex from, Hex to){
-		if(!to.occupied && Arrays.asList(from.neighbours).contains(to)){
-			Unit tmp = from.getUnit();
-			from.removeUnit();
-			to.placeUnit(tmp);
-			tmp.setPosition(to);
-			tmp.updateModifier();
-			
-			for(Unit u : tmp.getAdjacentUnits()){
-				u.updateModifier();
-			}
-			
-		}else{
-			System.out.println("Illegal move!");
-		}
-	}
+
 	
 	//Prints the board to console
 	public void print(){
