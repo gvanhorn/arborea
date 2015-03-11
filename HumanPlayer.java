@@ -11,6 +11,16 @@ public class HumanPlayer extends Player{
 				super.units.add(u);
 			}
 		}
+		
+	}
+
+	@Override
+	void perFormTurn() {
+		
+		while(super.turn){
+			
+		}
+		
 	}
 
 }

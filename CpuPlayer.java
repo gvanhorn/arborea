@@ -13,4 +13,10 @@ public class CpuPlayer extends Player{
 		}
 	}
 
+	@Override
+	void perFormTurn() {
+		
+		
+	}
+
 }

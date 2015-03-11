@@ -1,6 +1,6 @@
 import java.awt.event.*;
 
-public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener{
+public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener, ActionListener{
 	
 	@Override
 	public void windowStateChanged(WindowEvent e) {
@@ -66,7 +66,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
 		int x = e.getX();
 		int y = e.getY();
 		//System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
@@ -91,17 +91,20 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 						System.out.println("New hex selected");
 					//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 					}else if(h.occupied && b.selectedHex != null 
-						&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)){
+							&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)
+							&& screen.human.turn){
 						b.selectedHex.getUnit().attack(h.getUnit());
 						b.setSelected(null);
 						screen.repaint();
 						System.out.println("Unit attacked and hex deselected");
 					//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
 					}else if(!h.occupied && b.selectedHex != null && h != b.selectedHex
-							&& b.getSelectedHex().getUnit().owner.equals("human")){
+							&& b.getSelectedHex().getUnit().owner.equals("human")
+							&& screen.human.turn){
 						b.selectedHex.getUnit().move(h);
 						b.setSelected(null);
 						screen.unitPanel.repaint();
+						System.out.println("Unit moved and hex deselected");
 					//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
 					}else if(h.occupied && b.selectedHex!=null && h == b.selectedHex){
 						b.setSelected(null);
@@ -114,9 +117,9 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 				
 			}
 		}
-		long end = System.currentTimeMillis();
+		//long end = System.currentTimeMillis();
 		
-		System.out.println("Mouse click event took: " +  (end-start) +  " milliseconds");
+		//System.out.println("Mouse click event took: " +  (end-start) +  " milliseconds");
 		//screen.repaint();
 	}
 
@@ -141,6 +144,14 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("End turn")){
+			System.out.println("WE BE ENDING TURNS");
+		}
 		
 	}
 

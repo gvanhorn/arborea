@@ -105,13 +105,7 @@ public class Screen extends JLayeredPane{
 
 		//create end turn button
 		endTurnButton = new JButton("End turn");
-		endTurnButton.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e){
-				System.out.println("End turn clicked");
-				human.setTurn(false);
-			}
-		});
+		//endTurnButton.addActionListener(screen);
 		endTurnButton.setLocation(dim.width - (100 + 40), dim.height - (60 + 40));
 		// endTurnButton.setBounds(630, 680, dim.width - 20, dim.height - 20);
 		endTurnButton.setLayout(null);
