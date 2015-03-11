@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public abstract class Unit {
+public abstract class Unit implements java.io.Serializable{
 	int hitpoints;
 	int weaponSkill;
 	int weaponSkillModifier;

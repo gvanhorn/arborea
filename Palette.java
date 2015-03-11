@@ -1,7 +1,7 @@
 import java.awt.Color;
 
 
-public class Palette {
+public class Palette implements java.io.Serializable{
 	Color green;
 	Color orange;
 	Color lightOrange;

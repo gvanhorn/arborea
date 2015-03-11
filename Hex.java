@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 
 
 @SuppressWarnings("serial")
-public class Hex {
+public class Hex implements java.io.Serializable{
 	Polygon shape;
 	Point euclCoord;
 	Point axialCoord;

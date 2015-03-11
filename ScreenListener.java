@@ -87,7 +87,10 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 						screen.hexPanel.repaint();
 						System.out.println("hex selected");
 					//If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it
-					}else if(h.occupied && h != b.selectedHex && h.getUnit().owner.equals(b.selectedHex.getUnit().owner)){
+					}else if((h.occupied && h != b.selectedHex 
+							&& h.getUnit().owner.equals(b.selectedHex.getUnit().owner))
+							|| (b.selectedHex.getUnit().owner.equals("cpu")
+								&& h.getUnit().owner.equals("human"))){
 						b.setSelected(h);
 						screen.updateLabel();
 						screen.hexPanel.repaint();
@@ -95,7 +98,8 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 					}else if(h.occupied && b.selectedHex != null 
 							&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)
-							&& screen.board.human.turn){
+							&& screen.board.human.turn
+							&& b.selectedHex.unit.owner.equals("human")){
 						b.selectedHex.getUnit().attack(h.getUnit());
 						b.setSelected(null);
 						screen.repaint();
@@ -103,7 +107,8 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
 					}else if(!h.occupied && b.selectedHex != null && h != b.selectedHex
 							&& b.getSelectedHex().getUnit().owner.equals("human")
-							&& screen.board.human.turn){
+							&& screen.board.human.turn
+							&& b.selectedHex.unit.owner.equals("human")){
 						b.selectedHex.getUnit().move(h);
 						b.setSelected(null);
 						screen.unitPanel.repaint();
