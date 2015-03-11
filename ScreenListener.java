@@ -2,7 +2,7 @@ import java.awt.event.*;
 
 import javax.swing.JButton;
 
-public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener, ActionListener{
+public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener, ActionListener, KeyListener{
 	
 	@Override
 	public void windowStateChanged(WindowEvent e) {
@@ -115,12 +115,13 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 	
 	//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 	public Boolean selectOtherHex(Hex selected, Hex clicked, Screen s){
+		System.out.print(clicked != selected);
 		if(clicked.getUnit() != null){
 			if((clicked.occupied && clicked != selected && sameOwner(selected, clicked))
 					|| (selected.getUnit().owner.equals("cpu")
-						&& clicked.getUnit().owner.equals("human"))
+						&& clicked.getUnit().owner.equals("human") && clicked != selected )
 					|| (selected.getUnit().owner.equals("human")
-						&& !selected.adjacentTo(clicked))){
+						&& !selected.adjacentTo(clicked) && clicked != selected)){
 				s.board.setSelected(clicked);
 				s.updateLabel();
 				s.hexPanel.repaint();
