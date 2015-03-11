@@ -5,12 +5,17 @@ public class HumanPlayer extends Player{
 
 	HumanPlayer(Board b) {
 		super(b);
-		super.units = new ArrayList<Unit>();
+		super.myUnits = new ArrayList<Unit>();
+		super.opponentUnits = new ArrayList<Unit>();
 		for(Unit u : b.units){
 			if(u.owner.equals("human")){
-				super.units.add(u);
+				super.myUnits.add(u);
+			}else{
+				super.opponentUnits.add(u);
 			}
 		}
+		
+		
 		
 	}
 

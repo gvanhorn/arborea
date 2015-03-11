@@ -2,12 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class Player {
+public abstract class Player implements java.io.Serializable{
 boolean turn;
-List<Unit> units;
+Board board;
+List<Unit> myUnits;
+List<Unit> opponentUnits;
 
 	Player(Board b){
 		turn = false;
+		board = b;
 	}
 
 	public void setTurn(boolean t){
@@ -18,7 +21,7 @@ List<Unit> units;
 
 	public void resetTurn() {
 		
-		for(Unit u : units){
+		for(Unit u : myUnits){
 			u.moved = false;
 			u.attacked = false;
 		}
@@ -26,7 +29,7 @@ List<Unit> units;
 	}
 	
 	public void printUnits(){
-		for(Unit u : units){
+		for(Unit u : myUnits){
 			System.out.println(u.name);
 		}
 	}

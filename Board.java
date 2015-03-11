@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 
-public class Board {
+public class Board implements java.io.Serializable{
 	Hex[][] board;
 	List<Unit> units;
 	int radius;
@@ -219,10 +219,10 @@ public class Board {
 		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.darkGreen;
-			if(!h.getUnit().moved && human.getTurn()){
+			if(!h.getUnit().moved && human.getTurn() && h.getUnit().owner.equals("human")){
 				reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 			}
-			if(!h.getUnit().attacked && human.getTurn()){
+			if(!h.getUnit().attacked && human.getTurn()&& h.getUnit().owner.equals("human")){
 				reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
 			}
 		}
