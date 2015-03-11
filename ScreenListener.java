@@ -133,6 +133,14 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		//screen.repaint();
 	}
 
+	public Boolean sameOwner(Hex h1, Hex h2){
+		if (h1.getUnit().owner.equals(h2.getUnit().owner)){
+			return true;
+		} else{
+			return false;
+		}
+	}
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
