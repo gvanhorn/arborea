@@ -15,7 +15,7 @@ public class HumanPlayer extends Player{
 	}
 
 	@Override
-	void perFormTurn() {
+	void performTurn() {
 		
 		while(super.turn){
 			

@@ -1,5 +1,7 @@
 import java.awt.event.*;
 
+import javax.swing.JButton;
+
 public class ScreenListener implements WindowListener, WindowFocusListener, WindowStateListener, MouseListener, ActionListener{
 	
 	@Override
@@ -72,6 +74,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		//System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
 		Screen screen = (Screen) e.getSource();
 		Board b = screen.board;
+		System.out.println(e.getSource().getClass());
 		
 		for(Hex[] row: b.board){
 			for(Hex h: row){
@@ -92,7 +95,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 					}else if(h.occupied && b.selectedHex != null 
 							&&  !h.getUnit().owner.equals(b.selectedHex.getUnit().owner)
-							&& screen.human.turn){
+							&& screen.board.human.turn){
 						b.selectedHex.getUnit().attack(h.getUnit());
 						b.setSelected(null);
 						screen.repaint();
@@ -100,7 +103,7 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
 					}else if(!h.occupied && b.selectedHex != null && h != b.selectedHex
 							&& b.getSelectedHex().getUnit().owner.equals("human")
-							&& screen.human.turn){
+							&& screen.board.human.turn){
 						b.selectedHex.getUnit().move(h);
 						b.setSelected(null);
 						screen.unitPanel.repaint();
@@ -149,8 +152,16 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		JButton source = (JButton) e.getSource();
+		Screen s = (Screen) source.getParent().getParent();
+		
 		if(e.getActionCommand().equals("End turn")){
 			System.out.println("WE BE ENDING TURNS");
+			s.board.human.setTurn(false);
+			s.board.cpu.performTurn();
+			s.board.cpu.resetTurn();
+			s.repaint();
+			s.board.human.setTurn(true);
 		}
 		
 	}

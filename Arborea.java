@@ -17,8 +17,9 @@ public class Arborea {
 		board.createHexGridGraphics();
 		Player human = new HumanPlayer(board);
 		Player cpu = new CpuPlayer(board);
+		board.addPlayers(human, cpu);
 		
-		Screen screen = new Screen(board, screensize, human);
+		Screen screen = new Screen(board, screensize);
 		frame.setContentPane(screen);
 		
 		ScreenListener listener = new ScreenListener();
@@ -42,13 +43,13 @@ public class Arborea {
 			currentPlayer = players[0];
 			currentPlayer.setTurn(true);
 			System.out.println("About to start human turn");
-			currentPlayer.perFormTurn();
+			currentPlayer.performTurn();
 			currentPlayer.setTurn(false);
 			
 			currentPlayer = players[1];
 			currentPlayer.setTurn(true);
 			System.out.println("About to start cpu turn");
-			currentPlayer.perFormTurn();
+			currentPlayer.performTurn();
 			currentPlayer.setTurn(false);
 			
 			gameStillPlaying = checkWinState(players);

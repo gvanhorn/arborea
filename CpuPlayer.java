@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class CpuPlayer extends Player{
@@ -14,9 +15,18 @@ public class CpuPlayer extends Player{
 	}
 
 	@Override
-	void perFormTurn() {
+	void performTurn() {
+		//Perform random move
+		//int numberOfUnits = super.units.size();
+		Random rnd = new Random();
+		//int index = rnd.nextInt(numberOfUnits);
+		int index;
 		
-		
+		for(Unit u : super.units){
+			Hex[] hexes = u.getPosition().getUnOccupiedNeighbours();
+			index = rnd.nextInt(hexes.length);
+			u.move(hexes[index]);
+		}
 	}
 
 }

@@ -19,13 +19,12 @@ public class Screen extends JLayeredPane{
 
 	double hexSize;
 	Board board;
-	Player human;
+	
 	/*
 	 * 
 	 */
-	Screen(Board providedBoard, int[] screensize, Player p){
+	Screen(Board providedBoard, int[] screensize){
 		board = providedBoard;
-		human = p;
 		Dimension dim = new Dimension(screensize[0], screensize[1]);
 		setupPanels(dim);
 		loadImages();

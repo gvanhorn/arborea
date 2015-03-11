@@ -21,6 +21,7 @@ public class Board {
 	Hex selectedHex;
 	Palette palette;
 	int[] screensize;
+	Player human, cpu;
 	
 	//Constructor for the board, screensize is the size of the window
 	Board(int[] screensize){
@@ -154,6 +155,11 @@ public class Board {
 		setWSModifiers();
 	}
 	
+	public void addPlayers(Player h, Player c){
+		human = h;
+		cpu = c;
+	}
+	
 	public Point[] getAdjacent(Hex h){
 		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
 		Point[] adjacent = new Point[6];
@@ -213,10 +219,10 @@ public class Board {
 		if(h != null){
 			selectedHex = h;
 			selectedHex.color = palette.darkGreen;
-			if(!h.getUnit().moved){
+			if(!h.getUnit().moved && human.getTurn()){
 				reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 			}
-			if(!h.getUnit().attacked){
+			if(!h.getUnit().attacked && human.getTurn()){
 				reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
 			}
 		}
