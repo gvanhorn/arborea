@@ -30,6 +30,7 @@ public class Arborea {
 		frame.setVisible(true);
 		
 		Player[] players = {human, cpu};
+		
 		gameLoop(players);
 	}
 

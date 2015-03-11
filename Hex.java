@@ -84,6 +84,18 @@ public class Hex implements java.io.Serializable{
 		return neighbours;
 	}
 	
+	public int distanceTo(Hex h){
+		int cubex1 = axialCoord.x;
+		int cubez1 = axialCoord.y;
+		int cubey1 = -cubex1 - cubez1;
+		
+		int cubex2 = h.axialCoord.x;
+		int cubez2 = h.axialCoord.y;
+		int cubey2 = - cubex2 - cubez2;
+		
+		return (Math.abs(cubex1 - cubex2) + Math.abs(cubey1 - cubey2) + Math.abs(cubez1 - cubez2)) / 2;
+	}
+	
 	//return an array of neighbouring hexes for this hex that are not occupied.
 	public Hex[] getUnOccupiedNeighbours(){
 		List<Hex> unoccupied = new ArrayList<Hex>();

@@ -97,8 +97,6 @@ public abstract class Unit implements java.io.Serializable{
 		}
 	}
 		
-	
-	
 	public void move(Hex to){
 		if(!to.occupied && Arrays.asList(position.neighbours).contains(to) && !moved){
 			position.removeUnit();
