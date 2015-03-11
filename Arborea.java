@@ -5,12 +5,7 @@ import javax.swing.JFrame;
 public class Arborea {
 	
 	public static void main(String[] args){		
-		
-		//Unit[] units = {new Goblin("human"), new Swordsman("cpu")};
-		
-		Player human = new Player();
-		Player cpu = new Player();
-		
+
 		int[] screensize = {800, 800};
 		JFrame frame = new JFrame("Main screen");
 		frame.setSize(screensize[0],screensize[1]);
@@ -20,8 +15,10 @@ public class Arborea {
 		
 		Board board = new Board(screensize);
 		board.createHexGridGraphics();
+		Player human = new HumanPlayer(board);
+		Player cpu = new Player(board);
 		
-		Screen screen = new Screen(board, screensize);
+		Screen screen = new Screen(board, screensize, human);
 		frame.setContentPane(screen);
 		
 		ScreenListener listener = new ScreenListener();
@@ -30,9 +27,33 @@ public class Arborea {
 		
 		frame.setVisible(true);
 		
+		
+		gameLoop(human, cpu);
 //		
 	}
 
+	public static void gameLoop(Player human, Player cpu){
+		human.setTurn(true);
+		System.out.println("Game started");
+		
+		while(true){
+			//human player loop
+			human.setTurn(true);
+			while(human.turn){
+				//System.out.println("Human turn entered");
+			}
+			System.out.println("Human turn ended");
+			human.resetTurn();
+			//cpu player loop			
+			cpu.setTurn(true);
+			while(cpu.turn){
+				System.out.println("CPU turn entered");
+				cpu.turn= false;
+			}
+			
+		}
+		
+	}
 
 
 }
