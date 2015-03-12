@@ -17,6 +17,7 @@ public class Screen extends JLayeredPane{
 	JButton endTurnButton;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
 
+	Palette palette;
 	double hexSize;
 	Board board;
 	
@@ -26,6 +27,7 @@ public class Screen extends JLayeredPane{
 	Screen(Board providedBoard, int[] screensize){
 		board = providedBoard;
 		Dimension dim = new Dimension(screensize[0], screensize[1]);
+		palette = new Palette();
 		setupPanels(dim);
 		loadImages();
 	}
@@ -200,5 +202,59 @@ public class Screen extends JLayeredPane{
 			weaponSkillLabel.setText("");
 		}
 	}
+
+
+	//If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it
+	public Boolean selectHex(Hex selected, Hex clicked){
+		if(clicked.occupied && selected ==null){
+			this.setSelected(clicked);	
+			this.updateLabel();
+			this.hexPanel.repaint();
+			System.out.println("hex selected");
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+
+
+	public void setSelected(Hex h){
+		
+		//recolor the previously selected hex to default colors
+		if (board.selectedHex != null){
+			board.selectedHex.color = palette.green;
+			reColorHexGroup(board.selectedHex.neighbours, palette.green);
+		}
+		
+		//Color the newly selected hex and its neighbours
+		if(h != null){
+			board.selectedHex = h;
+			board.selectedHex.color = palette.darkGreen;
+			if(!h.getUnit().moved && board.human.getTurn() && h.getUnit().owner.equals("human")){
+				reColorHexGroup(board.selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
+			}
+			if(!h.getUnit().attacked && board.human.getTurn()&& h.getUnit().owner.equals("human")){
+				reColorHexGroup(board.selectedHex.getEnemyOccupiedNeighbours(), palette.red);
+			}
+		}
+		
+		//Deselect a hex
+		if(h == null){
+			board.selectedHex = null;
+		}
+	}
+
+	//Give a group of hexes a new color
+	public void reColorHexGroup(Hex[] group, Color c){
+		for(Hex h : group){
+			if(h != null){
+				h.color = c;
+			}
+		}
+	}
+
+	
+
 	
 }

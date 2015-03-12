@@ -205,43 +205,6 @@ public class Board implements java.io.Serializable{
 	public Hex getHex(int q, int r){
 		return board[r + radius][q + radius + Math.min(0, r)];
 	}
-	
-	//Set a hex to be selected and alter the colors of hexes accordingly.
-	public void setSelected(Hex h){
-		
-		//recolor the previously selected hex to default colors
-		if (selectedHex != null){
-			selectedHex.color = palette.green;
-			reColorHexGroup(selectedHex.neighbours, palette.green);
-		}
-		
-		//Color the newly selected hex and its neighbours
-		if(h != null){
-			selectedHex = h;
-			selectedHex.color = palette.darkGreen;
-			if(!h.getUnit().moved && human.getTurn() && h.getUnit().owner.equals("human")){
-				reColorHexGroup(selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
-			}
-			if(!h.getUnit().attacked && human.getTurn()&& h.getUnit().owner.equals("human")){
-				reColorHexGroup(selectedHex.getEnemyOccupiedNeighbours(), palette.red);
-			}
-		}
-		
-		//Deselect a hex
-		if(h == null){
-			selectedHex = null;
-		}
-	}
-	
-	//Give a group of hexes a new color
-	public void reColorHexGroup(Hex[] group, Color c){
-		for(Hex h : group){
-			if(h != null){
-				h.color = c;
-			}
-		}
-	}
-
 
 	
 	//Prints the board to console
