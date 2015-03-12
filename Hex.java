@@ -36,6 +36,10 @@ public class Hex implements java.io.Serializable{
 		euclCoord.x = centerX;
 		euclCoord.y = centerY;
 	}
+
+	public Point getEuclCoord(){
+		return euclCoord;
+	}
 	
 	public boolean setCoord(int q, int r){
 		axialCoord = new Point(q, r);

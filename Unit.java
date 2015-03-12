@@ -86,13 +86,11 @@ public abstract class Unit implements java.io.Serializable{
 		attacked = true;
 		if(rnd.nextFloat()<hitChance){
 			u.hitpoints--;
-			System.out.println("Attack Hit!");
 			if(u.hitpoints == 0){
 				u.getPosition().removeUnit();
 			}
 			return true;
 		}else{
-			System.out.println("Attack Missed!");
 			return false;
 		}
 	}

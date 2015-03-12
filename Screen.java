@@ -12,10 +12,12 @@ import javax.swing.*;
 public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
 
-	JPanel hexPanel, unitPanel, infoPanel, endTurnPanel;
-	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel;
+	JPanel hexPanel, unitPanel, infoPanel, popUpPanel, endTurnPanel;
+	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel, hitMissLabel;
 	JButton endTurnButton;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
+	ActionListener hitMisslistener;
+	Timer hitMissTimer;
 
 	Palette palette;
 	double hexSize;
@@ -30,6 +32,7 @@ public class Screen extends JLayeredPane{
 		palette = new Palette();
 		setupPanels(dim);
 		loadImages();
+		setupTimeListeners();
 	}
 
 
@@ -52,34 +55,42 @@ public class Screen extends JLayeredPane{
 		hexPanel = new hexPanel();
 		unitPanel = new unitPanel();
 		infoPanel = new JPanel();
+		popUpPanel = new JPanel(null);
 		endTurnPanel = new JPanel();
+		
 		
 
 		// Create unit info labels
 		unitNameLabel = new JLabel("", SwingConstants.LEFT);
 		hitPointsLabel = new JLabel("", SwingConstants.LEFT);
 		weaponSkillLabel = new JLabel("", SwingConstants.LEFT);
+		hitMissLabel = new JLabel("", SwingConstants.LEFT);
 		
 		// Set unit name font 
 		Font font = new Font("default", Font.BOLD,14);
 		unitNameLabel.setFont(font);
+	
+		// font = new Font("default", Font.BOLD, 10);	
+		// hitMissLabel.setFont(font);
 		
 		// Set dimensions of panels
 		this.setPreferredSize(dim);
 		hexPanel.setPreferredSize(dim);
 		unitPanel.setPreferredSize(dim);
+		popUpPanel.setPreferredSize(dim);
 		endTurnPanel.setPreferredSize(dim);
-		
 		
 		hexPanel.setBounds(0, 0, dim.width, dim.height);
 		unitPanel.setBounds(0, 0, dim.width, dim.height);
 		infoPanel.setBounds(10, 10, 150, 100);
+		popUpPanel.setBounds(0, 0, dim.width, dim.height);
 		endTurnPanel.setBounds(0, 0, dim.width, dim.height);
 		
 		// Set translucency of panels
 		unitPanel.setOpaque(false);
 		hexPanel.setOpaque(true);
 		infoPanel.setOpaque(true);
+		popUpPanel.setOpaque(false);
 		endTurnPanel.setOpaque(false);
 		
 		// Create layout for unit info label
@@ -113,15 +124,32 @@ public class Screen extends JLayeredPane{
 		endTurnButton.setSize(100, 60);
 		endTurnPanel.setLayout(null);
 		endTurnPanel.add(endTurnButton);
+
+
+		// Make hitMissLabel
+		hitMissLabel.setPreferredSize(new Dimension(10, 15));
+		hitMissLabel.setBounds(0, 0, 100, 20);
+		popUpPanel.add(hitMissLabel);
 		
 		// add panels to layeredPane
 		this.add(hexPanel, JLayeredPane.DEFAULT_LAYER);
 		this.add(unitPanel, JLayeredPane.PALETTE_LAYER);
 		this.add(infoPanel, JLayeredPane.MODAL_LAYER);
+		this.add(popUpPanel, JLayeredPane.POPUP_LAYER);
 		this.add(endTurnPanel, JLayeredPane.DRAG_LAYER);
 		
 		// Enable double buffering
-		this.setDoubleBuffered(true);	
+		this.setDoubleBuffered(true);
+	}
+
+	public void setupTimeListeners(){
+		hitMisslistener = new ActionListener(){
+  			public void actionPerformed(ActionEvent event){
+    			hitMissLabel.setText("");
+    			hitMissTimer.stop();
+  			}
+  		};	
+		hitMissTimer = new Timer(1000, hitMisslistener);
 	}
 	
 	@Override
@@ -273,9 +301,11 @@ public class Screen extends JLayeredPane{
 				&&  !sameOwner(selected, clicked)
 				&& this.board.human.getTurn()
 				&& selected.unit.owner.equals("human")
-				&& selected.adjacentTo(clicked)){
+				&& selected.adjacentTo(clicked)
+				&& !selected.unit.attacked){
 			
-			selected.getUnit().attack(clicked.getUnit());
+			Boolean hit = selected.getUnit().attack(clicked.getUnit());
+			paintHitMiss(clicked, hit);
 			this.setSelected(null);
 			this.repaint();
 			System.out.println("Unit attacked and hex deselected");
@@ -284,6 +314,33 @@ public class Screen extends JLayeredPane{
 			return false;
 		}
 	}
+
+	public void paintHitMiss(Hex h, Boolean hit){
+		Point euclCoord = h.getEuclCoord();
+		if (hit){
+			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width -1), euclCoord.y + (hitMissLabel.getPreferredSize().height));
+			if (hitMissTimer.isRunning()) {
+          		hitMissTimer.stop();
+          		hitMissLabel.setText("Hit!");
+          		hitMissTimer.start();
+        	} else {
+        		hitMissLabel.setText("Hit!");
+          		hitMissTimer.start();
+          	}
+		} else {
+			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width + 2), euclCoord.y + (hitMissLabel.getPreferredSize().height));
+			if (hitMissTimer.isRunning()) {
+          		hitMissTimer.stop();
+          		hitMissLabel.setText("Miss");
+          		hitMissTimer.start();
+        	} else {
+        		hitMissLabel.setText("Miss!");
+          		hitMissTimer.start();
+          	}
+		}
+
+	}
+
 	
 	public boolean move(Hex selected, Hex clicked){
 		if(!clicked.occupied && selected != null && clicked != selected
