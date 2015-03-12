@@ -244,6 +244,83 @@ public class Screen extends JLayeredPane{
 			board.selectedHex = null;
 		}
 	}
+	
+	public Boolean selectOtherHex(Hex selected, Hex clicked){
+		System.out.print(clicked != selected);
+		if(clicked.getUnit() != null){
+			if((clicked.occupied && clicked != selected && sameOwner(selected, clicked))
+					|| (selected.getUnit().owner.equals("cpu")
+						&& clicked.getUnit().owner.equals("human") && clicked != selected )
+					|| (selected.getUnit().owner.equals("human")
+						&& !selected.adjacentTo(clicked) && clicked != selected)){
+				this.setSelected(clicked);
+				this.updateLabel();
+				this.hexPanel.repaint();
+				System.out.println("New hex selected");
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+	
+	//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
+	public Boolean attackHex(Hex selected, Hex clicked){
+		//System.out.println("Attempt at attacking");
+		if(clicked.occupied && selected != null 
+				&&  !sameOwner(selected, clicked)
+				&& this.board.human.getTurn()
+				&& selected.unit.owner.equals("human")
+				&& selected.adjacentTo(clicked)){
+			
+			selected.getUnit().attack(clicked.getUnit());
+			this.setSelected(null);
+			this.repaint();
+			System.out.println("Unit attacked and hex deselected");
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean move(Hex selected, Hex clicked){
+		if(!clicked.occupied && selected != null && clicked != selected
+				&& selected.getUnit().owner.equals("human")
+				&& this.board.human.turn
+				&& selected.unit.owner.equals("human")){
+			
+			selected.getUnit().move(clicked);
+			this.setSelected(null);
+			this.unitPanel.repaint();
+			System.out.println("Unit moved and hex deselected");
+			return true;
+			
+		}else{
+			return false;
+		}
+	}
+	
+	//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
+	public boolean deselect(Hex selected, Hex clicked){
+		if(clicked.occupied && selected!=null && clicked == selected){
+			this.setSelected(null);
+			this.hexPanel.repaint();
+			System.out.println("Hex deselected");
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public Boolean sameOwner(Hex h1, Hex h2){
+		if (h1.getUnit().owner.equals(h2.getUnit().owner)){
+			return true;
+		} else{
+			return false;
+		}
+	}
 
 	//Give a group of hexes a new color
 	public void reColorHexGroup(Hex[] group, Color c){
