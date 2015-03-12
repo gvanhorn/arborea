@@ -39,4 +39,14 @@ List<Unit> opponentUnits;
 	}
 	
 	abstract void performTurn();
+
+	public List<Unit> getMyUnits() {
+		// TODO Auto-generated method stub
+		return myUnits;
+	}
+
+	public List<Unit> getOpponentUnits() {
+		// TODO Auto-generated method stub
+		return opponentUnits;
+	}
 }

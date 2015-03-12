@@ -26,20 +26,27 @@ public class CpuPlayer extends Player{
 	void performTurn() {
 		//Perform random move
 		//int numberOfUnits = super.units.size();
-		Random rnd = new Random();
+		//Random rnd = new Random();
 		//int index = rnd.nextInt(numberOfUnits);
+		//int index;
 		
-		int index;
+		Board temp = getDeepCopy(super.board);
+		Tactic tact = new AggroTactic(temp);
 		
-		//Board temp = getDeepCopy(super.board);
 		
-		for(Unit u : super.myUnits){
-			Hex[] hexes = u.getPosition().getUnOccupiedNeighbours();
-			if(hexes.length > 0){
-				index = rnd.nextInt(hexes.length);
-				u.move(hexes[index]);
-			}
-		}
+		tact.createTactic();
+		
+		
+		tact.executeMoves(super.board);
+		
+		//Do a random move for every unit.
+//		for(Unit u : super.myUnits){
+//			Hex[] hexes = u.getPosition().getUnOccupiedNeighbours();
+//			if(hexes.length > 0){
+//				index = rnd.nextInt(hexes.length);
+//				u.move(hexes[index]);
+//			}
+//		}
 		
 		/*
 		 * Move phase:

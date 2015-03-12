@@ -113,10 +113,39 @@ public abstract class Unit implements java.io.Serializable{
 				u.updateModifier();
 			}
 			moved = true;
-			System.out.println("Unit moved");
+			//System.out.println("Unit moved");
 		}else{
-			System.out.println("Illegal move!");
+			//System.out.println("Illegal move!");
 		}
+	}
+	
+	//moveTowards returns the Hex that this unit should move to, to get closer to the target, or null, if it next to it.
+	public Hex moveTowards(Unit target){
+		
+		if(position.adjacentTo(target.position)){
+			this.move(position);
+			return null;
+		}
+		
+		Hex bestmove = null;
+		Hex[] possibleHexes = position.getUnOccupiedNeighbours();
+		
+		if(possibleHexes.length > 0){
+			
+			bestmove = possibleHexes[0];
+			int dist = bestmove.distanceTo(target.position);
+			
+			for(Hex h : possibleHexes){
+				int distance = h.distanceTo(target.position);
+				if(distance < dist){
+					bestmove = h;
+					dist = distance;
+				}
+			}
+		}
+		this.move(bestmove);
+		return bestmove;
+		
 	}
 	
 	public void print(){
@@ -129,6 +158,11 @@ public abstract class Unit implements java.io.Serializable{
 	
 	public Point getOffset(){
 		return imageOffset;
+	}
+	
+	public String toString(){
+		String unit = name + " at: " +  position.axialCoord.toString();
+		return unit;
 	}
 
 }
