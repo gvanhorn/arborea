@@ -50,9 +50,8 @@ public class Arborea {
 			//Human can make turns here using mouselisteners
 			currentPlayer.performTurn();
 			// When human turn ends, give cpu the turn
-			System.out.print("Checkvoor getturn"); 
+			// System.out.print("currentplayer.getTurn(): "); 
 			// System.out.println(currentPlayer.getTurn());
-
 			if (currentPlayer.getTurn() == false){
 				System.out.println("IN DIE STATEMENT");
 
