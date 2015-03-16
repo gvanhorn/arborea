@@ -11,15 +11,6 @@ public class CpuPlayer extends Player{
 
 	CpuPlayer(Board b) {
 		super(b);
-		super.myUnits = new ArrayList<Unit>();
-		super.opponentUnits = new ArrayList<Unit>();
-		for(Unit u : b.units){
-			if(u.owner.equals("cpu")){
-				super.myUnits.add(u);
-			}else{
-				super.opponentUnits.add(u);
-			}
-		}
 	}
 
 	@Override
@@ -35,8 +26,6 @@ public class CpuPlayer extends Player{
 		
 		
 		tact.createTactic();
-		
-		
 		tact.executeMoves(super.board);
 		
 		//Do a random move for every unit.
@@ -92,6 +81,22 @@ public class CpuPlayer extends Player{
 		 long end = System.currentTimeMillis();
 		System.out.println("Deepcopy created in: " + (end-start));
 		return (Board) copy;
+	}
+
+	@Override
+	public void resetTurn() {
+		for(Unit u : super.board.cpuUnits){
+			u.moved = false;
+			u.attacked = false;
+		}
+		
+	}
+
+	@Override
+	public void printUnits() {
+		for(Unit u : super.board.cpuUnits){
+			System.out.println(u.name);
+		}
 	}
 
 }

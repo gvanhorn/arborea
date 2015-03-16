@@ -16,12 +16,14 @@ public abstract class Tactic {
 	List<Unit> myUnits;
 	List<Unit> opponentUnits;
 	
+	abstract MoveList getMoveList();
+	abstract void createTactic();
+	
 	Tactic(Board b){
 		board = b;
-		
 		Player cpu = b.cpu;
-		myUnits = cpu.getMyUnits();
-		opponentUnits = cpu.getOpponentUnits();
+		myUnits = b.cpuUnits;
+		opponentUnits = b.humanUnits;
 		distances = new int[myUnits.size()][opponentUnits.size()];
 		
 		for(int i=0; i<myUnits.size();i++){
@@ -58,12 +60,17 @@ public abstract class Tactic {
 		for(i=0; i < totalmoves; i++){
 			Hex[] move = moves.poll();
 			String type = types.poll();
-			Point fromCoord = new Point(move[0].axialCoord.x, move[0].axialCoord.y);
-			Point toCoord = new Point(move[1].axialCoord.x, move[1].axialCoord.y);
+			
+			
+			//Get the relevant hexes from the board everybody is playing on.
+			Hex from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
+			Hex to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
 			
 			if(type.equals("move")){
-				Unit u = b.getHex(fromCoord.x, fromCoord.y).getUnit();
-				u.move(b.getHex(toCoord.x, toCoord.y));
+				from.getUnit().move(to);
+			}
+			if(type.equals("attack")){
+				from.getUnit().attack(to.getUnit());
 			}
 			
 		}
@@ -95,8 +102,7 @@ public abstract class Tactic {
 			
 	}
 	
-	abstract MoveList getMoveList();
-	abstract void createTactic();
+
 	
 	private MoveList getDeepCopy(MoveList orig){
 		Object copy = null;

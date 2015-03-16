@@ -22,6 +22,8 @@ public class Board implements java.io.Serializable{
 	Palette palette;
 	int[] screensize;
 	Player human, cpu;
+	List<Unit> humanUnits;
+	List<Unit> cpuUnits;
 	
 	//Constructor for the board, screensize is the size of the window
 	Board(int[] screensize){
@@ -153,6 +155,15 @@ public class Board implements java.io.Serializable{
 			e.printStackTrace();
 		}
 		setWSModifiers();
+		humanUnits = new ArrayList<Unit>();
+		cpuUnits = new ArrayList<Unit>();
+		for(Unit u : this.units){
+			if(u.owner.equals("cpu")){
+				cpuUnits.add(u);
+			}else{
+				humanUnits.add(u);
+			}
+		}
 	}
 	
 	public void addPlayers(Player h, Player c){

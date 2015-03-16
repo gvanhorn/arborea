@@ -1,6 +1,8 @@
 import java.util.List;
 
 
+
+
 public class AggroTactic extends Tactic{
 
 	
@@ -37,13 +39,27 @@ public class AggroTactic extends Tactic{
 		}
 		
 		//loop for planning attacks
-
-		
-		
-		
-	}
+		for(Unit u : super.myUnits){
+			
+			List<Unit> adjacentEnemies = u.getAdjacentEnemies();
+			Unit target;
+			if(adjacentEnemies.size() >= 1){
+				target = adjacentEnemies.get(0);
+				if(adjacentEnemies.size() > 1){
+					System.out.println("Planning attack for unit: " + u.toString());
+					target = adjacentEnemies.get(0);
+					for(Unit t : adjacentEnemies){
+						if((t.weaponSkill + t.weaponSkillModifier) < (target.weaponSkill + target.weaponSkillModifier)){
+							target = t;
+						}
+					}
+					super.movelist.addToHexList(u.getPosition(), target.getPosition());
+					super.movelist.addToTypeList("attack");
+				}
+			}
+		}
 
 
 	
-
+	}
 }
