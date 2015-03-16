@@ -78,12 +78,25 @@ public abstract class Unit implements java.io.Serializable{
 		return units;
 	}
 	
+	public List<Unit> getAdjacentEnemies(){
+		List<Unit> enemies = new ArrayList<Unit>();
+		List<Unit> units = this.getAdjacentUnits();
+		for(Unit u : units){
+			if(!u.owner.equals(this.owner)){
+				enemies.add(u);
+			}
+		}
+		return enemies;
+	}
+	
 	public boolean attack(Unit u){
-		
+		//Calculate the hit chance
 		double hitChance =  1/(1+Math.pow(Math.E, (-0.4* ((weaponSkill + weaponSkillModifier)-(u.weaponSkill + u.weaponSkillModifier)))));
 		System.out.println(hitChance);
 		Random rnd = new Random();
 		attacked = true;
+		
+		//See if the attack hits
 		if(rnd.nextFloat()<hitChance){
 			u.hitpoints--;
 			if(u.hitpoints == 0){

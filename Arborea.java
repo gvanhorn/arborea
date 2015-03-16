@@ -56,25 +56,6 @@ public class Arborea {
 			gameStillPlaying = checkWinState(players);
 		}
 
-//		while(true){
-//			//human player loop
-//			human.setTurn(true);
-//			while(human.getTurn()){
-//				//human.printUnits();
-//				//System.out.println("Human turn entered");
-//				//human.setTurn(false);
-//			}
-//			System.out.println("Human turn ended");
-//			//human.resetTurn();
-//			//cpu player loop			
-//			cpu.setTurn(true);
-//			System.out.println("cpu turn set");
-//			while(cpu.turn){
-//				System.out.println("CPU turn entered");
-//				cpu.turn= false;
-//			}
-//			
-//		}
 		
 	}
 	

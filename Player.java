@@ -5,8 +5,7 @@ import java.util.List;
 public abstract class Player implements java.io.Serializable{
 boolean turn;
 Board board;
-List<Unit> myUnits;
-List<Unit> opponentUnits;
+
 
 	Player(Board b){
 		turn = false;
@@ -19,34 +18,15 @@ List<Unit> opponentUnits;
 		resetTurn();
 	}
 
-	public void resetTurn() {
-		
-		for(Unit u : myUnits){
-			u.moved = false;
-			u.attacked = false;
-		}
-		
-	}
+	public abstract void resetTurn();
 	
-	public void printUnits(){
-		for(Unit u : myUnits){
-			System.out.println(u.name);
-		}
-	}
+	public abstract void printUnits();
+	
+	abstract void performTurn();
 	
 	public boolean getTurn(){
 		return turn;
 	}
 	
-	abstract void performTurn();
-
-	public List<Unit> getMyUnits() {
-		// TODO Auto-generated method stub
-		return myUnits;
-	}
-
-	public List<Unit> getOpponentUnits() {
-		// TODO Auto-generated method stub
-		return opponentUnits;
-	}
+	
 }

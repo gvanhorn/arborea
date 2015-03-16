@@ -4,19 +4,7 @@ import java.util.ArrayList;
 public class HumanPlayer extends Player{
 
 	HumanPlayer(Board b) {
-		super(b);
-		super.myUnits = new ArrayList<Unit>();
-		super.opponentUnits = new ArrayList<Unit>();
-		for(Unit u : b.units){
-			if(u.owner.equals("human")){
-				super.myUnits.add(u);
-			}else{
-				super.opponentUnits.add(u);
-			}
-		}
-		
-		
-		
+		super(b);		
 	}
 
 	@Override
@@ -24,6 +12,23 @@ public class HumanPlayer extends Player{
 		
 		while(super.turn){
 			
+		}
+		
+	}
+
+	@Override
+	public void resetTurn() {
+		for(Unit u : super.board.humanUnits){
+			u.moved = false;
+			u.attacked = false;
+		}
+		
+	}
+
+	@Override
+	public void printUnits() {
+		for(Unit u : super.board.cpuUnits){
+			System.out.println(u.name);
 		}
 		
 	}
