@@ -1,10 +1,10 @@
-import java.util.ArrayList;
-import java.util.List;
+
 
 /*
  * A general class for a player
  */
 
+@SuppressWarnings("serial")
 public abstract class Player implements java.io.Serializable{
 boolean turn;
 Board board;

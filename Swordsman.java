@@ -1,7 +1,6 @@
 import java.awt.Point;
 
-
-
+@SuppressWarnings("serial")
 public class Swordsman extends Unit{
 	
 	Swordsman(String o){
