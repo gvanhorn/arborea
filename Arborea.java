@@ -42,7 +42,7 @@ public class Arborea {
 		// String audioFile = "/Users/Jeroen/arborea/sounds/Mountains.wav";
 		// Sound sound = new Sound(audioFile);
 		Sound player = new Sound();
-		player.playSound(player.mainLoop);
+		player.playSoundStream(player.mainLoop);
 		// Start game loop
 		gameLoop(players, screen, board);
 	}

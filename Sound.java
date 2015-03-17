@@ -5,10 +5,16 @@ import java.io.*;
 
 
 public class Sound{
-	String mainLoop;
+	// String mainLoop;
+	AudioInputStream mainLoop;
 
 	Sound(){
-		mainLoop = "sounds/Mountains.wav";
+		try {
+		mainLoop = AudioSystem.getAudioInputStream(new File("sounds/Mountains.wav").getAbsoluteFile());
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
 	}
 
 	public static void playSound(String filename) {
@@ -22,5 +28,17 @@ public class Sound{
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
 	    }
+	}
+
+	public static void playSoundStream(AudioInputStream audio){
+	    try {
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audio);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+
 	}
 }
