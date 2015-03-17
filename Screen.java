@@ -395,6 +395,8 @@ public class Screen extends JLayeredPane{
 				// soundmanager.stopClip(soundmanager.swordClashClip);
 				// soundmanager.swordClashClip.setMicrosecondPosition(0);
 				soundmanager.playClip(soundmanager.swordClashClip);
+			}else{
+				soundmanager.playClip(soundmanager.whooshClip);
 			}
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
@@ -420,6 +422,8 @@ public class Screen extends JLayeredPane{
 			// soundmanager.stopClip(soundmanager.swordClashClip);
 			// soundmanager.swordClashClip.setMicrosecondPosition(0);
 			soundmanager.playClip(soundmanager.swordClashClip);
+		}else{
+			soundmanager.playClip(soundmanager.whooshClip);
 		}
 		this.setSelected(null);
 		this.repaint();
