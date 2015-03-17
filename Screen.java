@@ -350,21 +350,24 @@ public class Screen extends JLayeredPane{
 	
 	public Boolean selectOtherHex(Hex selected, Hex clicked){
 		System.out.print(clicked != selected);
-		if(clicked.getUnit() != null){
-			if((clicked.occupied && clicked != selected && sameOwner(selected, clicked))
-					|| (selected.getUnit().owner.equals("cpu")
-						&& clicked.getUnit().owner.equals("human") && clicked != selected )
-					|| (selected.getUnit().owner.equals("human")
-						&& !selected.adjacentTo(clicked) && clicked != selected)){
+		if (clicked.getUnit() != null && clicked != selected) {
+			if((clicked.occupied && sameOwner(selected, clicked))
+					|| (selected.occupied && selected.getUnit().owner.equals("cpu")
+						&& clicked.getUnit().owner.equals("human"))
+					|| (selected.occupied && selected.getUnit().owner.equals("human")
+						&& !selected.adjacentTo(clicked) )) {
+
+
 				this.setSelected(clicked);
 				this.updateLabel();
 				this.hexPanel.repaint();
 				System.out.println("New hex selected");
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}else{
+
+		} else {
 			return false;
 		}
 	}
@@ -381,7 +384,9 @@ public class Screen extends JLayeredPane{
 				&& !selected.unit.attacked){
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
-			paintHitMiss(clicked, hit);
+			paintHitMiss(clicked, hit);	
+			board.removeDead(clicked.getUnit());
+			
 			this.setSelected(null);
 			this.repaint();
 			System.out.println("Unit attacked and hex deselected");
@@ -391,10 +396,10 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
-
 	public Boolean cpuAttackHex(Hex selected, Hex clicked){
 		System.out.println("Attempt at attacking");
 		Boolean hit = selected.getUnit().attack(clicked.getUnit());
+		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
 		this.setSelected(null);
 		this.repaint();
@@ -407,7 +412,6 @@ public class Screen extends JLayeredPane{
 		Point euclCoord = h.getEuclCoord();
 		if (hit){
 			// hitMissLabel.setForeground(Color.red);
-			System.out.println("THATS A HIT");
 			// hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width -10), euclCoord.y + (hitMissLabel.getPreferredSize().height));
 			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -6 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
@@ -420,7 +424,6 @@ public class Screen extends JLayeredPane{
           	}
 		} else {
 			// hitMissLabel.setForeground(Color.white);
-			System.out.println("TOO BAD SON");
 			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -10 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
           		hitMissTimer.stop();

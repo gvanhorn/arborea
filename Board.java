@@ -304,6 +304,17 @@ public class Board implements java.io.Serializable{
 			}
 		}
 	}
+
+	public void removeDead(Unit u) {
+		if(u.hitpoints == 0){
+			if (u.owner.equals("human")){
+				humanUnits.remove(u);
+			} else {
+				cpuUnits.remove(u);
+			}
+			u.getPosition().removeUnit(); 
+		}
+	}
 	
 
 }
