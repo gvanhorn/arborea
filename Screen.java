@@ -19,14 +19,11 @@ public class Screen extends JLayeredPane{
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
 	ActionListener hitMisslistener;
 	Timer hitMissTimer;
-
 	Palette palette;
 	double hexSize;
 	Board board;
-	
-	/*
-	 * 
-	 */
+
+	// Initializes the screen 
 	Screen(Board providedBoard, int[] screensize){
 		board = providedBoard;
 		Dimension dim = new Dimension(screensize[0], screensize[1]);
@@ -38,19 +35,21 @@ public class Screen extends JLayeredPane{
 		setupTimeListeners();
 	}
 
-
+	// Loads the images from the images folder
 	public void loadImages(){
-
 		try{
 			goblinImg = ImageIO.read(new File("images/Goblin.png"));
 			swordsmanImg = ImageIO.read(new File("images/Swordsman.png"));
 			orcImg = ImageIO.read(new File("images/Orc.png"));
 			generalImg = ImageIO.read(new File("images/General.png"));
-		}catch(IOException e){
+		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
 
+
+	// Initializes the hitChanceLabels, 
+	// there are 6 labels because a hexagon has 6 accompanying sides
 	public void initHitChanceLabels(){
 		hitChanceLabels = new JLabel[6];
 
@@ -58,14 +57,13 @@ public class Screen extends JLayeredPane{
 			hitChanceLabels[i] = new JLabel("", SwingConstants.LEFT);
 			hitChanceLabels[i].setPreferredSize(new Dimension(10, 15));
 			hitChanceLabels[i].setBounds(0, 0, 100, 20);
-			// Font hitChanceFont = new Font("default", Font.PLAIN, 20);
-			// Label.setFont(hitChanceFont);
 			hitChanceLabels[i].setForeground(Color.black);
 			popUpPanel.add(hitChanceLabels[i]);
-
 		}
 	}
 
+
+	// Intializes all panels
 	public void setupPanels(Dimension dim){
 
 		// Create all JPanels
@@ -86,9 +84,6 @@ public class Screen extends JLayeredPane{
 		// Set unit name font 
 		Font font = new Font("default", Font.BOLD,14);
 		unitNameLabel.setFont(font);
-	
-		// font = new Font("default", Font.BOLD, 10);	
-		// hitMissLabel.setFont(font);
 		
 		// Set dimensions of panels
 		this.setPreferredSize(dim);
@@ -111,20 +106,16 @@ public class Screen extends JLayeredPane{
 		endTurnPanel.setOpaque(false);
 		
 		// Create layout for unit info label
-
 		infoPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
 		c.ipady = 10;
 		c.ipadx = 10;
 		c.gridx = 0;
 		c.gridy = 0;
 		infoPanel.add(unitNameLabel, c);
-		
 		c.gridy = 1;
 		infoPanel.add(hitPointsLabel, c);
-		
 		c.gridy = 2;
 		infoPanel.add(weaponSkillLabel, c);
 		
@@ -134,9 +125,7 @@ public class Screen extends JLayeredPane{
 
 		//create end turn button
 		endTurnButton = new JButton("End turn");
-		//endTurnButton.addActionListener(screen);
 		endTurnButton.setLocation(dim.width - (100 + 40), dim.height - (60 + 40));
-		// endTurnButton.setBounds(630, 680, dim.width - 20, dim.height - 20);
 		endTurnButton.setLayout(null);
 		endTurnButton.setSize(100, 60);
 		endTurnPanel.setLayout(null);
@@ -151,15 +140,11 @@ public class Screen extends JLayeredPane{
 		hitMissLabel.setForeground(Color.white);
 		popUpPanel.add(hitMissLabel);
 
-		// Make hitChanceLabel
-		// hitChanceLabel
-		// winLoseLabel.setPreferredSize(new Dimension(10, 15));
+		// Make winLose label
 		int wlLabelWidth = 600;
 		int wlLabelHeight = 130;
 		winLoseLabel.setBounds(0, 0, wlLabelWidth, wlLabelHeight);
-		// winLoseLabel.setLocation(screenWidth / 2,400);
 		winLoseLabel.setLocation((screenWidth /2) - (wlLabelWidth / 2) , (screenHeight / 2) - 200);
-
 		popUpPanel.add(winLoseLabel);
 
 		// add panels to layeredPane
@@ -175,6 +160,7 @@ public class Screen extends JLayeredPane{
 		this.setDoubleBuffered(true);
 	}
 
+	// Initializes an Actionlistener that removes labels after a specified time 
 	public void setupTimeListeners(){
 		hitMisslistener = new ActionListener(){
   			public void actionPerformed(ActionEvent event){
@@ -192,7 +178,6 @@ public class Screen extends JLayeredPane{
 	}
 	
 	private class hexPanel extends JPanel{
-		
 		@Override
 		public void paintComponent(Graphics g){
 			Graphics2D g2 = (Graphics2D) g;
@@ -211,7 +196,6 @@ public class Screen extends JLayeredPane{
 	}
 	
 	private class unitPanel extends JPanel{
-	
 		@Override
 		public void paintComponent(Graphics g){
 			Graphics2D g2 = (Graphics2D) g;
@@ -222,6 +206,7 @@ public class Screen extends JLayeredPane{
 			}
 		}
 		
+		// Paints the units on the screen
 		private void paintUnit(Graphics2D g2, Hex h){
 			if(h.occupied){
 				switch (h.unit.getName()){
@@ -245,19 +230,25 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
-
-
+	// Updates the infolabel in the top left
 	public void updateLabel(){
 		if (board.selectedHex != null) {
 			Hex h = board.selectedHex;
+
+			// Display unit name
 			unitNameLabel.setText(h.unit.name);
+
+			// Display unit hit points
 			hitPointsLabel.setText("HP: " + Integer.toString(h.unit.hitpoints));
+
+			// Display unit weaponskill + modifier
 			if (h.unit.weaponSkillModifier >= 0){
 				weaponSkillLabel.setText("Weapon skill: " + Integer.toString(h.unit.weaponSkill) + " + " + Integer.toString(h.unit.weaponSkillModifier));
 			} else {
 				weaponSkillLabel.setText("Weapon skill: " + Integer.toString(h.unit.weaponSkill) + " " + Integer.toString(h.unit.weaponSkillModifier));
 			}
 		}
+		// When no unit is selected, clear label
 		else{
 			unitNameLabel.setText("");
 			hitPointsLabel.setText("");
@@ -266,7 +257,8 @@ public class Screen extends JLayeredPane{
 	}
 
 
-	//If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it
+	// If the selected hex is occupied, a hex was already selected and they are not the same and have the same owner, select it.
+	// Returns true if this is the case 
 	public Boolean selectHex(Hex selected, Hex clicked){
 		if(clicked.occupied && selected ==null){
 			this.setSelected(clicked);	
@@ -281,95 +273,84 @@ public class Screen extends JLayeredPane{
 	}
 
 
+	// Selects the provided hex, used when no other hex is selected.
 	public void setSelected(Hex h){
 		Hex[] adjacentEnemies;
 
-		//recolor the previously selected hex to default colors
+		// Recolor the previously selected hex to default colors
 		if (board.selectedHex != null){
 			board.selectedHex.color = palette.green;
 			reColorHexGroup(board.selectedHex.neighbours, palette.green);
 		}
 		
-		//Color the newly selected hex and its neighbours
+		// Color the newly selected hex and its neighbours
 		if(h != null){
 			board.selectedHex = h;
 			board.selectedHex.color = palette.darkGreen;
 
-			// With human check included
-
+			// Paints the unoccupied neigbours of the selected hex
 			if(!h.getUnit().moved && board.human.getTurn() && h.getUnit().owner.equals("human")){
 				reColorHexGroup(board.selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 			}
+			// Paints the adjacent enemy hexes red, and displays hit percentages
 			if(!h.getUnit().attacked && board.human.getTurn()&& h.getUnit().owner.equals("human")){
-		
 				adjacentEnemies = board.selectedHex.getEnemyOccupiedNeighbours();
 				paintPercentages(adjacentEnemies, h);
 				reColorHexGroup(adjacentEnemies, palette.red);
 			}
-
-
-			// Without human check 
-
-			// if(!h.getUnit().moved && board.human.getTurn() && h.getUnit().owner.equals("human")){
-			// 	reColorHexGroup(board.selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
-			// }
-			// if(!h.getUnit().attacked){
-		
-			// 	adjacentEnemies = board.selectedHex.getEnemyOccupiedNeighbours();
-			// 	paintPercentages(adjacentEnemies, h);
-			// 	reColorHexGroup(adjacentEnemies, palette.red);
-			// }
 		}
 		
-		//Deselect a hex
+		// Deselect a hex
 		if(h == null){
 			board.selectedHex = null;
 		}
 	}
 
-
+	// Loops over all enemies, painting each hit percentage below the enemy
 	public void paintPercentages(Hex[] enemies, Hex selectedUnit){
 		clearPercentages();
 		Point coords;
+		
+		// actual hit-chance
 		double hitChance;
+		
+		// rounded hit-chance
 		int prettyChance;
+		
 		int counter = 0;
 		for (Hex enemy : enemies){
 			coords = enemy.getEuclCoord();
 			hitChance = 1/(1+Math.pow(Math.E, (-0.4* ((selectedUnit.getUnit().weaponSkill + selectedUnit.getUnit().weaponSkillModifier)-(enemy.getUnit().weaponSkill + enemy.getUnit().weaponSkillModifier)))));
 			prettyChance = (int) Math.round(hitChance * 100);
-			System.out.println("Hitchance: " + prettyChance);
-			System.out.println(coords.x);
 			hitChanceLabels[counter].setLocation(coords.x -9 , coords.y + 15);
 			hitChanceLabels[counter].setText(prettyChance + "%");
 			counter++;
 		}
 	}
 
+	// Clears hit-percentages off the screen which were added by the player
 	public void clearPercentages(){
 		for (int i = 0; i < 6; i++){
 			hitChanceLabels[i].setText("");
 		}
 	}
 	
+	// Paints win or lose message on screen
 	public void paintwinLose(){
 		if (board.humanUnits.size() == 0){
 			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 152);
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setText("You Lose");
 			winLoseLabel.setForeground(palette.bloodRed);
-			System.out.println("YOU LOSE");
 		} else if (board.cpuUnits.size() == 0){
 			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 67);
 			winLoseLabel.setFont(winLoseFont);
-			System.out.println("YOU WIN!!");
 			winLoseLabel.setForeground(palette.gold);
 			winLoseLabel.setText("Thou Art Victorious");
-			// winLoseLabel.setLocation(( screenWidth / 2 ) - (winLoseLabel.getPreferredSize().width / 2), ( screenHeight / 2 ) - (winLoseLabel.getPreferredSize().height / 2) );
 		}
 	}
 
-
+	// Select a new hex when another hex is already selected
 	public Boolean selectOtherHex(Hex selected, Hex clicked){
 		System.out.print(clicked != selected);
 		if (clicked.getUnit() != null && clicked != selected) {
@@ -379,11 +360,9 @@ public class Screen extends JLayeredPane{
 					|| (selected.occupied && selected.getUnit().owner.equals("human")
 						&& !selected.adjacentTo(clicked) )) {
 
-
 				this.setSelected(clicked);
 				this.updateLabel();
 				this.hexPanel.repaint();
-				System.out.println("New hex selected");
 				return true;
 			} else {
 				return false;
@@ -394,10 +373,10 @@ public class Screen extends JLayeredPane{
 		}
 	}
 	
-	//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
+	// Attacks the clicked unit, with the unit on the selected hex, 
+	// returns true/false depending on the possibility of attack
 	public Boolean attackHex(Hex selected, Hex clicked){
 
-		System.out.println("Attempt at attacking");
 		if(clicked.occupied && selected != null 
 				&&  !sameOwner(selected, clicked)
 				&& this.board.human.getTurn()
@@ -414,16 +393,15 @@ public class Screen extends JLayeredPane{
 			if (board.victory()){
 				paintwinLose();
 			}
-
-			System.out.println("Unit attacked and hex deselected");
 			return true;
 		}else{
 			return false;
 		}
 	}
 
+
+	// Attacks the clicked unit, with the unit on the selected hex
 	public Boolean cpuAttackHex(Hex selected, Hex clicked){
-		System.out.println("Attempt at attacking");
 		Boolean hit = selected.getUnit().attack(clicked.getUnit());
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
@@ -438,11 +416,13 @@ public class Screen extends JLayeredPane{
 	}
 
 
+	// Paints hit/miss labels on attacked unit, depending on whether an attack hit or missed 
+	// Starts hitMissTimer which removes the label after timer completion
 	public void paintHitMiss(Hex h, Boolean hit){
 		Point euclCoord = h.getEuclCoord();
+
+		// When attack hits, paint Hit! and (re)start timer
 		if (hit){
-			// hitMissLabel.setForeground(Color.red);
-			// hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width -10), euclCoord.y + (hitMissLabel.getPreferredSize().height));
 			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -6 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
           		hitMissTimer.stop();
@@ -452,8 +432,8 @@ public class Screen extends JLayeredPane{
         		hitMissLabel.setText("Hit!");
           		hitMissTimer.start();
           	}
+      	// When attack misses, paint Miss! and (re)start timer
 		} else {
-			// hitMissLabel.setForeground(Color.white);
 			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -10 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
           		hitMissTimer.stop();
@@ -464,23 +444,21 @@ public class Screen extends JLayeredPane{
           		hitMissTimer.start();
           	}
 		}
-
 	}
 
-	
+	// Moves unit from selected hex position to clicked hex position
 	public boolean move(Hex selected, Hex clicked){
 		if(!clicked.occupied && selected != null && clicked != selected
 				&& selected.getUnit().owner.equals("human")
 				&& this.board.human.turn
 				&& selected.unit.owner.equals("human")){
-			
+
 			selected.getUnit().move(clicked);
 			this.setSelected(null);
 			this.unitPanel.repaint();
 			System.out.println("Unit moved and hex deselected");
 			return true;
-			
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -493,15 +471,16 @@ public class Screen extends JLayeredPane{
 			this.hexPanel.repaint();
 			System.out.println("Hex deselected");
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
 
+	// Check whether the provided hexes have the same owner
 	public Boolean sameOwner(Hex h1, Hex h2){
 		if (h1.getUnit().owner.equals(h2.getUnit().owner)){
 			return true;
-		} else{
+		} else {
 			return false;
 		}
 	}
@@ -515,7 +494,5 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
-	
-
-	
+		
 }

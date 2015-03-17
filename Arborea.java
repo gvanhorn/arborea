@@ -6,59 +6,62 @@ import java.util.Queue;
 public class Arborea {
 	
 	public static void main(String[] args){		
-
+		
+		// Set screen size
 		int[] screensize = {800, 800};
+
+		// Initialize Board
+		Board board = new Board(screensize);
+		board.createHexGridGraphics();
+
+		// Create Players and add to board
+		Player human = new HumanPlayer(board);
+		Player cpu = new CpuPlayer(board);
+		Player[] players = {human, cpu};
+		board.addPlayers(human, cpu);
+
+		// Initialize screen
 		JFrame frame = new JFrame("Main screen");
 		frame.setSize(screensize[0],screensize[1]);
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
-		Board board = new Board(screensize);
-		board.createHexGridGraphics();
-		Player human = new HumanPlayer(board);
-		Player cpu = new CpuPlayer(board);
-		board.addPlayers(human, cpu);
-		
 		Screen screen = new Screen(board, screensize);
 		frame.setContentPane(screen);
 		
+		// Initialize screen listeners
 		ScreenListener listener = new ScreenListener();
 		frame.addWindowListener(listener);
 		screen.addMouseListener(listener);
 		screen.endTurnButton.addActionListener(listener);
-		
 		frame.setVisible(true);
 		
-		Player[] players = {human, cpu};
-		
+		// Start game loop
 		gameLoop(players, screen, board);
 	}
 
-
-
 	public static void gameLoop(Player[] players, Screen screen, Board board){
+
+		// Keeps game running
 		boolean gameStillPlaying;
-		System.out.println("Game started");
-		Player currentPlayer;
 		gameStillPlaying = true;
 
-		// Give human turn
+		// Keeps track of turns
+		Player currentPlayer;
+
+		// Start game with human
 		currentPlayer = players[0];
 		currentPlayer.setTurn(true);
 
+		// Main loop
 		while (gameStillPlaying){
-			//Human can make turns here using mouselisteners
-			// currentPlayer.performTurn();
-			try {
-				Thread.sleep(50);                 //1000 milliseconds is one second.
-			} catch(InterruptedException ex) {
-    			Thread.currentThread().interrupt();
-			}
-			// When human turn ends, give cpu the turn
-			// System.out.print("Checkvoor getturn"); 
-			// System.out.println(currentPlayer.getTurn());
 
+			// Human can make turns here using mouselisteners
+			// Sleep to reduce processor activity
+			sleep(50);
+
+
+			// When human turn ends, give cpu the turn
 			if (currentPlayer.getTurn() == false){
 
 				// Check for win state
@@ -74,6 +77,7 @@ public class Arborea {
 					cpuTurn((CpuPlayer) currentPlayer, screen, board);
 				}
 
+				// Check for win state after cpu turn
 				if (board.victory()){
 					gameStillPlaying = false;
 					break;
@@ -87,66 +91,70 @@ public class Arborea {
 
 	}
 
+
+	/* cpuTurn gets a tactic for the current board. The tactic is returned in two lists, 
+	 * a move list, and type list. Moves contains which hex should perform an action on which hex, 
+	 * types specifies wether this action is a move or an attack.
+	 * These moves are then performed, with a pause in between to create an animation of the moves.
+	 */
+
 	public static void cpuTurn(CpuPlayer cpu, Screen screen, Board b){
 		screen.clearPercentages();
+
+		// Create the tactic
 		Tactic tactic = cpu.getTactic(b);
+		
+		// Retreives to actions from the tactic and stores them in queues
 		Queue<Hex[]> moves = tactic.movelist.getOrderedHexList();
 		Queue<String> types = tactic.movelist.getOrderedTypeList();
+
+		// Total amount of actions to make
 		int totalmoves = moves.size();
-		System.out.println("Number of moves planned: " + totalmoves);
-		int i;
+
 		Hex from, to;
 		
-		for(i=0; i < totalmoves; i++){
+		for (int i=0; i < totalmoves; i++) {
+	
+			// Retrieve move from queue
 			Hex[] move = moves.poll();
 			String type = types.poll();
 			
-			//Get the relevant hexes from the board everybody is playing on.
+			// Get the relevant hexes from the board
 			from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
 			to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
 			
+			// Create visuals for action, and perform action
 			if(type.equals("move") && from != to){
-				// Animate selection
 				screen.setSelected(from);
 				screen.repaint();
-				
-				try {
-					Thread.sleep(200);
-				} catch(InterruptedException ex) {
-	    			Thread.currentThread().interrupt();
-				}
+				sleep(200);
+
 				// Perform move
 				from.getUnit().move(to);
 			}
 
 			if(type.equals("attack")){
-				
-				// Animate selection
 				screen.setSelected(from);
 				screen.repaint();
-				
-				try {
-					Thread.sleep(200);              
-				} catch(InterruptedException ex) {
-	    			Thread.currentThread().interrupt();
-				}
+				sleep(200);
+
 				// perform attack
-				// from.getUnit().attack(to.getUnit());
 				screen.cpuAttackHex(from, to);
 			}
-			
 			screen.repaint();
-
-			try {
-				Thread.sleep(100);                 
-			} catch(InterruptedException ex) {
-    			Thread.currentThread().interrupt();
-			}
-			
+			sleep(100);
 		}
 		screen.setSelected(null);
 		screen.hexPanel.repaint();
+	}
 
+	// Pauses execution
+	public static void sleep(int milliseconds){
+		try {
+			Thread.sleep(milliseconds);
+		} catch(InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 }
