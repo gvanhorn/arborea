@@ -22,8 +22,6 @@ Board board;
 	
 	public abstract void printUnits();
 	
-	abstract void performTurn();
-	
 	public boolean getTurn(){
 		return turn;
 	}

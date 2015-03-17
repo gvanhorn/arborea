@@ -3,6 +3,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
+@SuppressWarnings("serial")
+/*
+ * 
+ */
+
 public class MoveList implements Serializable{
 	private Queue<Hex[]> orderedHexList;
 	private Queue<String> orderedMoveTypeList;
