@@ -134,7 +134,7 @@ public class Arborea {
 			if(type.equals("move") && from != to){
 				screen.setSelected(from);
 				screen.repaint();
-				sleep(200);
+				sleep(333);
 
 				// Perform move
 				from.getUnit().move(to);
@@ -143,13 +143,13 @@ public class Arborea {
 			if(type.equals("attack")){
 				screen.setSelected(from);
 				screen.repaint();
-				sleep(200);
+				sleep(333);
 
 				// perform attack
 				screen.cpuAttackHex(from, to);
 			}
 			screen.repaint();
-			sleep(100);
+			sleep(333);
 		}
 		screen.setSelected(null);
 		screen.hexPanel.repaint();
