@@ -1,5 +1,8 @@
 import javax.swing.JFrame;
 import java.util.Queue;
+import javax.sound.sampled.*;
+import java.io.*;
+
 
 
 public class Arborea {
@@ -22,7 +25,7 @@ public class Arborea {
 		// Initialize screen
 		JFrame frame = new JFrame("Main screen");
 		frame.setSize(screensize[0],screensize[1]);
-		frame.setResizable(true);
+		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		Screen screen = new Screen(board, screensize);
@@ -34,7 +37,14 @@ public class Arborea {
 		screen.addMouseListener(listener);
 		screen.endTurnButton.addActionListener(listener);
 		frame.setVisible(true);
+
+		// Start song
+		// String audioFile = "/Users/Jeroen/arborea/sounds/Mountains.wav";
+		// Sound sound = new Sound(audioFile);
 		
+		playSound("sounds/Mountains.wav");
+		sleep(2000);
+		playSound("sounds/Mountains.wav");
 		// Start game loop
 		gameLoop(players, screen, board);
 	}
@@ -155,5 +165,17 @@ public class Arborea {
 			Thread.currentThread().interrupt();
 		}
 	}
+
+	public static void playSound(String filename) {
+	    try {
+	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filename).getAbsoluteFile());
+	        Clip clip = AudioSystem.getClip();
+	        clip.open(audioInputStream);
+	        clip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+}
 
 }
