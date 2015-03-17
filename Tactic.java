@@ -4,7 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 
 
@@ -48,37 +54,105 @@ public abstract class Tactic {
 		
 		return to;
 	}
-
-	// public void executeMoves(Board b){
-	// 	Queue<Hex[]> moves = movelist.getOrderedHexList();
-	// 	Queue<String> types = movelist.getOrderedTypeList();
-	// 	int totalmoves = moves.size();
-	// 	System.out.println("Number of moves planned: " + totalmoves);
-	// 	int i;
-	// 	for(i=0; i < totalmoves; i++){
-	// 		Hex[] move = moves.poll();
-	// 		String type = types.poll();
-
-			
-			
-	// 		//Get the relevant hexes from the board everybody is playing on.
-	// 		Hex from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
-	// 		Hex to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
-			
-
-	// 		if(type.equals("move")){
-	// 			from.getUnit().move(to);
-	// 		}
-	// 		if(type.equals("attack")){
-	// 			from.getUnit().attack(to.getUnit());
-	// 		}
-
-			
-	// 	}
+	
+	public List<Hex> aStar(Hex start, Hex goal){
+		System.out.println("A-star planning path from : " + start.toString() + " to: " + goal.toString());
 		
-	// 	System.out.println("Number of moves done:" + i);
-	// }
+		List<Hex> closedList = new ArrayList<Hex>();
+		List<Hex> openList = new ArrayList<Hex>();
+		Map<Hex, Hex> came_from = new HashMap<Hex, Hex>();
+		
+		Comparator<Entry<Hex, Integer>> valueCompare = new Comparator<Entry<Hex, Integer>>() {
+		    public int compare(Entry<Hex, Integer> entry1, Entry<Hex, Integer> entry2) {
+		        return entry1.getValue().compareTo(entry2.getValue());
+		    }
+		};
+		openList.add(start);
+		
+		Map<Hex, Integer> fscores = new HashMap<Hex, Integer>();
+		Map<Hex, Integer> gscores = new HashMap<Hex, Integer>();
+		
+		gscores.put(start, 0);
+		fscores.put(start, cost(start, goal));
+		int currentPathLength, lowestFscore;
+		Hex currentHex;
+		
+		while(!openList.isEmpty()){
+			//currentHex = Collections.min(fscores.entrySet(), valueCompare).getKey();
+			
+			int score;
+			int lowest = 99999;
+			currentHex = start;
+			for(Entry<Hex, Integer> e : fscores.entrySet()){
+				score = e.getValue();
+				if(openList.contains(e.getKey()) && score < lowest){
+					currentHex = e.getKey();
+					lowest = score;
+				}
+			}
+			
+			
+			openList.remove(currentHex);
+			closedList.add(currentHex);
+			
+//			
+//			System.out.println("Starting point is: " + start.toString());
+//			System.out.println("Target is: " + goal.toString());
+//			System.out.println("CurrentHex is: " + currentHex.toString());
+//			System.out.println("Fscores: " + fscores.toString());
+//			System.out.println("Gscores: " + gscores.toString());
+//			System.out.println("Came from: " + came_from.toString());
+			
+			if(currentHex.axialCoord == goal.axialCoord){
+				return reconstructPath(came_from, goal);
+			}
+			
+			
+			
+			for(Hex neighbour : currentHex.getUnOccupiedNeighbours()){	
+				
+				//System.out.println(neighbour.toString());
+				if(!closedList.contains(neighbour)){
+					currentPathLength = gscores.get(currentHex) + 1;
+					if(!openList.contains(neighbour) || (currentPathLength < fscores.get(neighbour))){
+						
+						came_from.put(neighbour, currentHex);
+						gscores.put(neighbour, currentPathLength);
+						fscores.put(neighbour, gscores.get(neighbour) + cost(neighbour, goal));
+						
+						if(!openList.contains(neighbour)){
+							openList.add(neighbour);
+						}
+					}
+				}
+				
+				
+				
+				
+				
+				
+			}
+			
+		}
+		return null;
+	}
 
+	public List<Hex> reconstructPath(Map<Hex, Hex> came_from, Hex current) {
+		List<Hex> totalPath = new ArrayList<Hex>();
+		totalPath.add(current);
+		while(came_from.containsKey(current)){
+			current = came_from.get(current);
+			totalPath.add(current);
+		}
+		return totalPath;
+	}
+	
+	public int cost(Hex from, Hex to){
+		return from.distanceTo(to);
+	}
+	
+	
+	
 	
 	public void printDistances(){
 		int i=0,j=0;

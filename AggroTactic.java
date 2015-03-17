@@ -25,17 +25,33 @@ public class AggroTactic extends Tactic{
 		//loop for planning the walking moves
 		for(Unit u: super.board.cpuUnits){
 			
-			//System.out.println("planning move for unit: " + u.toString());
+			System.out.println("planning move for unit: " + u.toString());
 			Unit target = super.getClosestEnemyUnit(u);
-			//System.out.println("Going to target: " + target.toString());
+			System.out.println("Going to target: " + target.toString());
 			
 			Hex from = u.getPosition();
-			u.moveTowards(target);
-			Hex to = u.getPosition();
-			super.movelist.addToHexList(from, to);
-			super.movelist.addToTypeList("move");
+			Hex targetHex = target.getPosition();
 			
-			//System.out.println("moving to hex: " + to.axialCoord.toString());
+			Hex to = targetHex.getUnOccupiedNeighbours()[0];
+			
+			int bestDist = from.distanceTo(to);
+			for(Hex possibleTo : targetHex.getUnOccupiedNeighbours()){
+				if(from.distanceTo(possibleTo) < bestDist){
+					bestDist = from.distanceTo(possibleTo);
+					to = possibleTo;
+				}	
+			}
+			
+
+			List<Hex> path = super.aStar(from, to);
+			if(path != null){
+			System.out.println("PATH IS: " + path.toString());
+			u.move(path.get(path.size()-2));
+			//System.out.println("moving to hex: " + path.get(0));
+			super.movelist.addToHexList(from, path.get(path.size()-2));
+			super.movelist.addToTypeList("move");
+			}
+			
 		}
 		
 		//loop for planning attacks
@@ -50,7 +66,7 @@ public class AggroTactic extends Tactic{
 				double bestHitChance = getHitChance(u, target);
 				double hitChance = getHitChance(u, target);
 				for(Unit t : adjacentEnemies){
-					hitChance = getHitChance(u, target);
+					hitChance = getHitChance(u, t);
 					if(hitChance > bestHitChance){
 						bestHitChance = hitChance;
 					}
