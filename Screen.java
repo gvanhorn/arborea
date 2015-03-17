@@ -344,6 +344,8 @@ public class Screen extends JLayeredPane{
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setText("You Lose");
 			winLoseLabel.setForeground(palette.bloodRed);
+			soundmanager.stopClip(soundmanager.mainClip);
+			soundmanager.playClip(soundmanager.defeatClip);
 		} else if (board.cpuUnits.size() == 0){
 			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 67);
 			winLoseLabel.setFont(winLoseFont);
