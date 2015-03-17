@@ -13,18 +13,19 @@ public class CpuPlayer extends Player{
 		super(b);
 	}
 
+
 	@Override
 	void performTurn() {
-
 		
-		Board temp = getDeepCopy(super.board);
+	}
+
+	public Tactic getTactic(Board board){
+		Board temp = getDeepCopy(board);
 		Tactic tact = new AggroTactic(temp);
 		
-		
-		tact.createMoves();
-		tact.print();
-		tact.executeMoves(super.board);
-		
+		tact.createTactic();
+
+		return tact;
 	}
 	
 	private Board getDeepCopy(Board orig){

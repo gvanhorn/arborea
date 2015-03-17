@@ -15,7 +15,8 @@ public abstract class Tactic {
 	int[][] distances;
 
 	abstract MoveList getMoveList();
-	abstract void createMoves();
+	//abstract void createMoves();
+	abstract void createTactic();
 	
 	Tactic(Board b){
 		board = b;
@@ -47,37 +48,37 @@ public abstract class Tactic {
 		
 		return to;
 	}
-	
-	public void executeMoves(Board b){
-		Queue<Hex[]> moves = movelist.getOrderedHexList();
-		Queue<String> types = movelist.getOrderedTypeList();
-		int totalmoves = moves.size();
-		//System.out.println("Number of moves planned: " + totalmoves);
-		
-		
-		
-		int i;
-		for(i=0; i < totalmoves; i++){
-			Hex[] move = moves.poll();
-			String type = types.poll();
+
+	// public void executeMoves(Board b){
+	// 	Queue<Hex[]> moves = movelist.getOrderedHexList();
+	// 	Queue<String> types = movelist.getOrderedTypeList();
+	// 	int totalmoves = moves.size();
+	// 	System.out.println("Number of moves planned: " + totalmoves);
+	// 	int i;
+	// 	for(i=0; i < totalmoves; i++){
+	// 		Hex[] move = moves.poll();
+	// 		String type = types.poll();
+
 			
 			
-			//Get the relevant hexes from the board everybody is playing on.
-			Hex from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
-			Hex to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
+	// 		//Get the relevant hexes from the board everybody is playing on.
+	// 		Hex from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
+	// 		Hex to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
 			
-			if(type.equals("move")){
-				from.getUnit().move(to);
-			}
-			if(type.equals("attack")){
-				from.getUnit().attack(to.getUnit());
-				b.updatePlayerUnits();
-			}
+
+	// 		if(type.equals("move")){
+	// 			from.getUnit().move(to);
+	// 		}
+	// 		if(type.equals("attack")){
+	// 			from.getUnit().attack(to.getUnit());
+	// 		}
+
 			
-		}
+	// 	}
 		
-		System.out.println("Number of moves done:" + i);
-	}
+	// 	System.out.println("Number of moves done:" + i);
+	// }
+
 	
 	public void printDistances(){
 		int i=0,j=0;
@@ -134,5 +135,9 @@ public abstract class Tactic {
 		 long end = System.currentTimeMillis();
 		System.out.println("Deepcopy created in: " + (end-start));
 		return (MoveList) copy;
+	}
+	void createMoves() {
+		// TODO Auto-generated method stub
+		
 	}
 }

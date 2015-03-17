@@ -28,5 +28,4 @@ Board board;
 		return turn;
 	}
 	
-	
 }

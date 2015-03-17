@@ -135,10 +135,6 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		if(e.getActionCommand().equals("End turn")){
 			System.out.println("WE BE ENDING TURNS");
 			s.board.human.setTurn(false);
-			s.board.cpu.performTurn();
-			s.board.cpu.resetTurn();
-			s.repaint();
-			s.board.human.setTurn(true);
 		}
 		
 	}

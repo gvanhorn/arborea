@@ -10,11 +10,7 @@ public class HumanPlayer extends Player{
 	@Override
 	void performTurn() {
 		
-		while(super.turn){
-			
 		}
-		
-	}
 
 	@Override
 	public void resetTurn() {

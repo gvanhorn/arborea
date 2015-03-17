@@ -18,7 +18,7 @@ public class AggroTactic extends Tactic{
 	}
 
 	@Override
-	void createMoves() {
+	void createTactic() {
 		super.movelist = new MoveList();
 		System.out.println("Creating moves");
 		
