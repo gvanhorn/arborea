@@ -10,7 +10,7 @@ public class Sound{
 
 	Sound(){
 		try {
-		mainLoop = AudioSystem.getAudioInputStream(new File("sounds/Mountains.wav").getAbsoluteFile());
+		mainLoop = AudioSystem.getAudioInputStream(new File("sounds/Arborea.wav").getAbsoluteFile());
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
