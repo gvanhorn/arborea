@@ -156,7 +156,6 @@ public class Hex implements java.io.Serializable{
 	public void print(){
 		System.out.printf("occupied: " + occupied);
 	}
-	
 
 
 }

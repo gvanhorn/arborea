@@ -1,5 +1,6 @@
 import javax.swing.JFrame;
-
+import java.util.List;
+import java.util.Queue;
 
 
 public class Arborea {
@@ -31,12 +32,12 @@ public class Arborea {
 		
 		Player[] players = {human, cpu};
 		
-		gameLoop(players, screen);
+		gameLoop(players, screen, board);
 	}
 
 
 
-	public static void gameLoop(Player[] players, Screen screen){
+	public static void gameLoop(Player[] players, Screen screen, Board board){
 		boolean gameStillPlaying;
 		System.out.println("Game started");
 		Player currentPlayer;
@@ -48,13 +49,17 @@ public class Arborea {
 
 		while (gameStillPlaying){
 			//Human can make turns here using mouselisteners
-			currentPlayer.performTurn();
+			// currentPlayer.performTurn();
+			try {
+				Thread.sleep(50);                 //1000 milliseconds is one second.
+			} catch(InterruptedException ex) {
+    			Thread.currentThread().interrupt();
+			}
 			// When human turn ends, give cpu the turn
-			System.out.print("Checkvoor getturn"); 
+			// System.out.print("Checkvoor getturn"); 
 			// System.out.println(currentPlayer.getTurn());
 
 			if (currentPlayer.getTurn() == false){
-				System.out.println("IN DIE STATEMENT");
 
 				// Check for win state
 				if (Victory(players)){
@@ -65,8 +70,7 @@ public class Arborea {
 					currentPlayer.setTurn(true);
 					
 					// Let CPU perform moves
-					currentPlayer.performTurn();
-					screen.repaint();
+					cpuTurn((CpuPlayer) currentPlayer, screen, board);
 				}
 
 				if (Victory(players)){
@@ -80,55 +84,71 @@ public class Arborea {
 		}
 	}
 
-
-	// public static void gameLoop(Player[] players, Screen screen){
-	// 	boolean gameStillPlaying = true;
-	// 	System.out.println("Game started");
-	// 	Player currentPlayer;
-
-	// 	currentPlayer = players[0];
-	// 	currentPlayer.setTurn(true);
-		
-	// 	while(gameStillPlaying){
-	// 		// Player is allowed to make moves
-	// 		currentPlayer.performTurn();
-			
-	// 		if (!currentPlayer.getTurn()){
-				
-	// 			// Reset player turn
-	// 			currentPlayer.resetTurn();
-				
-	// 			// Give turn to CPU
-	// 			currentPlayer = players[1];
-	// 			currentPlayer.setTurn(true);
-	// 			System.out.println("Starting cpu turn");
-	// 			currentPlayer.performTurn();
-	// 			screen.repaint();
-
-	// 			// Check for winstate
-	// 			if (!checkWinState(players)){
-	// 				gameStillPlaying = true;
-
-	// 				// Stop CPU turn
-	// 				currentPlayer.setTurn(false);
-	// 				currentPlayer.resetTurn();	
- 
-	// 				System.out.print("IGAME STILLS PLAYING ");
-	// 				System.out.println(!gameStillPlaying);
-					
-	// 				// Start player turn
-	// 				currentPlayer = players[0];
-	// 				currentPlayer.setTurn(true);
-	// 			}
-	// 		} 
-	// 	}
-
-		
-	// }
 	
 	public static boolean Victory(Player[] players){
 		return false;
 	}
 
+	public static void cpuTurn(CpuPlayer cpu, Screen screen, Board b){
+		screen.clearPercentages();
+		Tactic tactic = cpu.getTactic(b);
+		Queue<Hex[]> moves = tactic.movelist.getOrderedHexList();
+		Queue<String> types = tactic.movelist.getOrderedTypeList();
+		int totalmoves = moves.size();
+		System.out.println("Number of moves planned: " + totalmoves);
+		int i;
+		Hex from, to;
+		
+		for(i=0; i < totalmoves; i++){
+			Hex[] move = moves.poll();
+			String type = types.poll();
+			
+			//Get the relevant hexes from the board everybody is playing on.
+			from = b.getHex(move[0].axialCoord.x, move[0].axialCoord.y);
+			to = b.getHex(move[1].axialCoord.x, move[1].axialCoord.y);
+			
+			if(type.equals("move") && from != to){
+				// Animate selection
+				screen.setSelected(from);
+				screen.repaint();
+				
+				try {
+					Thread.sleep(200);
+				} catch(InterruptedException ex) {
+	    			Thread.currentThread().interrupt();
+				}
+				// Perform move
+				from.getUnit().move(to);
+			}
+
+			if(type.equals("attack")){
+				
+				// Animate selection
+				screen.setSelected(from);
+				screen.repaint();
+				
+				try {
+					Thread.sleep(200);              
+				} catch(InterruptedException ex) {
+	    			Thread.currentThread().interrupt();
+				}
+				// perform attack
+				// from.getUnit().attack(to.getUnit());
+				screen.cpuAttackHex(from, to);
+			}
+			
+			screen.repaint();
+
+			try {
+				Thread.sleep(100);                 
+			} catch(InterruptedException ex) {
+    			Thread.currentThread().interrupt();
+			}
+			
+		}
+		screen.setSelected(null);
+		screen.hexPanel.repaint();
+
+	}
 
 }

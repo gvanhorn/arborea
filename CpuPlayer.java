@@ -13,6 +13,7 @@ public class CpuPlayer extends Player{
 		super(b);
 	}
 
+
 	@Override
 	void performTurn() {
 		//Perform random move
@@ -21,12 +22,12 @@ public class CpuPlayer extends Player{
 		//int index = rnd.nextInt(numberOfUnits);
 		//int index;
 		
-		Board temp = getDeepCopy(super.board);
-		Tactic tact = new AggroTactic(temp);
+		// Board temp = getDeepCopy(super.board);
+		// Tactic tact = new AggroTactic(temp);
 		
 		
-		tact.createTactic();
-		tact.executeMoves(super.board);
+		// tact.createTactic();
+		// tact.executeMoves(super.board);
 		
 		//Do a random move for every unit.
 //		for(Unit u : super.myUnits){
@@ -53,6 +54,15 @@ public class CpuPlayer extends Player{
 		 * - focus on targets with low hp
 		 */
 		
+	}
+
+	public Tactic getTactic(Board board){
+		Board temp = getDeepCopy(board);
+		Tactic tact = new AggroTactic(temp);
+		
+		tact.createTactic();
+
+		return tact;
 	}
 	
 	private Board getDeepCopy(Board orig){

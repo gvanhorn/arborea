@@ -13,7 +13,8 @@ public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
 
 	JPanel hexPanel, unitPanel, infoPanel, popUpPanel, endTurnPanel;
-	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel, hitMissLabel;
+	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel, hitMissLabel, hitChanceLabel;
+	JLabel[] hitChanceLabels;
 	JButton endTurnButton;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
 	ActionListener hitMisslistener;
@@ -48,6 +49,20 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
+	public void initHitChanceLabels(){
+		hitChanceLabels = new JLabel[6];
+
+		for (int i = 0; i < 6; i++){
+			hitChanceLabels[i] = new JLabel("", SwingConstants.LEFT);
+			hitChanceLabels[i].setPreferredSize(new Dimension(10, 15));
+			hitChanceLabels[i].setBounds(0, 0, 100, 20);
+			// Font hitChanceFont = new Font("default", Font.PLAIN, 20);
+			// Label.setFont(hitChanceFont);
+			hitChanceLabels[i].setForeground(Color.black);
+			popUpPanel.add(hitChanceLabels[i]);
+
+		}
+	}
 
 	public void setupPanels(Dimension dim){
 
@@ -57,14 +72,14 @@ public class Screen extends JLayeredPane{
 		infoPanel = new JPanel();
 		popUpPanel = new JPanel(null);
 		endTurnPanel = new JPanel();
-		
-		
+
 
 		// Create unit info labels
 		unitNameLabel = new JLabel("", SwingConstants.LEFT);
 		hitPointsLabel = new JLabel("", SwingConstants.LEFT);
 		weaponSkillLabel = new JLabel("", SwingConstants.LEFT);
 		hitMissLabel = new JLabel("", SwingConstants.LEFT);
+		hitChanceLabel = new JLabel("", SwingConstants.LEFT);
 		
 		// Set unit name font 
 		Font font = new Font("default", Font.BOLD,14);
@@ -129,14 +144,28 @@ public class Screen extends JLayeredPane{
 		// Make hitMissLabel
 		hitMissLabel.setPreferredSize(new Dimension(10, 15));
 		hitMissLabel.setBounds(0, 0, 100, 20);
+		Font hitMissFont = new Font("default", Font.PLAIN, 20);
+		hitMissLabel.setFont(hitMissFont);
+		hitMissLabel.setForeground(Color.white);
 		popUpPanel.add(hitMissLabel);
-		
+
+		// Make hitChanceLabel
+		// hitChanceLabel
+		hitChanceLabel.setPreferredSize(new Dimension(10, 15));
+		hitChanceLabel.setBounds(0, 0, 100, 20);
+		Font hitChanceFont = new Font("default", Font.PLAIN, 20);
+		hitChanceLabel.setFont(hitChanceFont);
+		hitChanceLabel.setForeground(Color.black);
+		popUpPanel.add(hitChanceLabel);
+
 		// add panels to layeredPane
 		this.add(hexPanel, JLayeredPane.DEFAULT_LAYER);
 		this.add(unitPanel, JLayeredPane.PALETTE_LAYER);
 		this.add(infoPanel, JLayeredPane.MODAL_LAYER);
 		this.add(popUpPanel, JLayeredPane.POPUP_LAYER);
 		this.add(endTurnPanel, JLayeredPane.DRAG_LAYER);
+
+		initHitChanceLabels();
 		
 		// Enable double buffering
 		this.setDoubleBuffered(true);
@@ -146,6 +175,7 @@ public class Screen extends JLayeredPane{
 		hitMisslistener = new ActionListener(){
   			public void actionPerformed(ActionEvent event){
     			hitMissLabel.setText("");
+    			clearPercentages();
     			hitMissTimer.stop();
   			}
   		};	
@@ -248,7 +278,8 @@ public class Screen extends JLayeredPane{
 
 
 	public void setSelected(Hex h){
-		
+		Hex[] adjacentEnemies;
+
 		//recolor the previously selected hex to default colors
 		if (board.selectedHex != null){
 			board.selectedHex.color = palette.green;
@@ -259,17 +290,61 @@ public class Screen extends JLayeredPane{
 		if(h != null){
 			board.selectedHex = h;
 			board.selectedHex.color = palette.darkGreen;
+
+			// With human check included
+
 			if(!h.getUnit().moved && board.human.getTurn() && h.getUnit().owner.equals("human")){
 				reColorHexGroup(board.selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
 			}
 			if(!h.getUnit().attacked && board.human.getTurn()&& h.getUnit().owner.equals("human")){
-				reColorHexGroup(board.selectedHex.getEnemyOccupiedNeighbours(), palette.red);
+		
+				adjacentEnemies = board.selectedHex.getEnemyOccupiedNeighbours();
+				paintPercentages(adjacentEnemies, h);
+				reColorHexGroup(adjacentEnemies, palette.red);
 			}
+
+
+			// Without human check 
+
+			// if(!h.getUnit().moved && board.human.getTurn() && h.getUnit().owner.equals("human")){
+			// 	reColorHexGroup(board.selectedHex.getUnOccupiedNeighbours(), palette.lightOrange);
+			// }
+			// if(!h.getUnit().attacked){
+		
+			// 	adjacentEnemies = board.selectedHex.getEnemyOccupiedNeighbours();
+			// 	paintPercentages(adjacentEnemies, h);
+			// 	reColorHexGroup(adjacentEnemies, palette.red);
+			// }
 		}
 		
 		//Deselect a hex
 		if(h == null){
 			board.selectedHex = null;
+		}
+	}
+
+
+	public void paintPercentages(Hex[] enemies, Hex selectedUnit){
+		clearPercentages();
+		Point coords;
+		double hitChance;
+		int prettyChance;
+		int counter = 0;
+		for (Hex enemy : enemies){
+			coords = enemy.getEuclCoord();
+			hitChance = 1/(1+Math.pow(Math.E, (-0.4* ((selectedUnit.getUnit().weaponSkill + selectedUnit.getUnit().weaponSkillModifier)-(enemy.getUnit().weaponSkill + enemy.getUnit().weaponSkillModifier)))));
+			prettyChance = (int) Math.round(hitChance * 100);
+			System.out.println("Hitchance: " + prettyChance);
+			System.out.println(coords.x);
+			hitChanceLabels[counter].setLocation(coords.x -9 , coords.y + 15);
+			hitChanceLabels[counter].setText(prettyChance + "%");
+			counter++;
+		}
+	}
+
+	public void clearPercentages(){
+		for (int i = 0; i < 6; i++){
+			hitChanceLabels[i].setText("");
 		}
 	}
 	
@@ -296,7 +371,8 @@ public class Screen extends JLayeredPane{
 	
 	//If the selected hex is not occupied, a hex was already selected, they are not the same and the previously selected is owned by the human player, move it.
 	public Boolean attackHex(Hex selected, Hex clicked){
-		//System.out.println("Attempt at attacking");
+
+		System.out.println("Attempt at attacking");
 		if(clicked.occupied && selected != null 
 				&&  !sameOwner(selected, clicked)
 				&& this.board.human.getTurn()
@@ -315,10 +391,25 @@ public class Screen extends JLayeredPane{
 		}
 	}
 
+
+	public Boolean cpuAttackHex(Hex selected, Hex clicked){
+		System.out.println("Attempt at attacking");
+		Boolean hit = selected.getUnit().attack(clicked.getUnit());
+		paintHitMiss(clicked, hit);
+		this.setSelected(null);
+		this.repaint();
+		System.out.println("Unit attacked and hex deselected");
+		return true;
+	}
+
+
 	public void paintHitMiss(Hex h, Boolean hit){
 		Point euclCoord = h.getEuclCoord();
 		if (hit){
-			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width -1), euclCoord.y + (hitMissLabel.getPreferredSize().height));
+			// hitMissLabel.setForeground(Color.red);
+			System.out.println("THATS A HIT");
+			// hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width -10), euclCoord.y + (hitMissLabel.getPreferredSize().height));
+			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -6 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
           		hitMissTimer.stop();
           		hitMissLabel.setText("Hit!");
@@ -328,7 +419,9 @@ public class Screen extends JLayeredPane{
           		hitMissTimer.start();
           	}
 		} else {
-			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width + 2), euclCoord.y + (hitMissLabel.getPreferredSize().height));
+			// hitMissLabel.setForeground(Color.white);
+			System.out.println("TOO BAD SON");
+			hitMissLabel.setLocation(euclCoord.x - (hitMissLabel.getPreferredSize().width) -10 , euclCoord.y - 8);
 			if (hitMissTimer.isRunning()) {
           		hitMissTimer.stop();
           		hitMissLabel.setText("Miss");
@@ -361,6 +454,7 @@ public class Screen extends JLayeredPane{
 	
 	//If the selected hex is occupied, a hex was already selected and they are the same, deselect it.
 	public boolean deselect(Hex selected, Hex clicked){
+		clearPercentages();
 		if(clicked.occupied && selected!=null && clicked == selected){
 			this.setSelected(null);
 			this.hexPanel.repaint();
