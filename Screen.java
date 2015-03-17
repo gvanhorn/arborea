@@ -344,6 +344,8 @@ public class Screen extends JLayeredPane{
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setText("You Lose");
 			winLoseLabel.setForeground(palette.bloodRed);
+			soundmanager.stopClip(soundmanager.mainClip);
+			soundmanager.playClip(soundmanager.defeatClip);
 		} else if (board.cpuUnits.size() == 0){
 			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 67);
 			winLoseLabel.setFont(winLoseFont);
@@ -391,6 +393,7 @@ public class Screen extends JLayeredPane{
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			if(hit){
 				soundmanager.stopClip(soundmanager.swordClashClip);
+				soundmanager.swordClashClip.setMicrosecondPosition(0);
 				soundmanager.playClip(soundmanager.swordClashClip);
 			}
 			paintHitMiss(clicked, hit);	
@@ -415,6 +418,7 @@ public class Screen extends JLayeredPane{
 		paintHitMiss(clicked, hit);
 		if(hit){
 			soundmanager.stopClip(soundmanager.swordClashClip);
+			soundmanager.swordClashClip.setMicrosecondPosition(0);
 			soundmanager.playClip(soundmanager.swordClashClip);
 		}
 		this.setSelected(null);

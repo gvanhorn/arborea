@@ -5,7 +5,9 @@ import java.io.*;
 public class Sound{
 	// String mainLoop;
 	AudioInputStream audioIn;
-	Clip mainClip, footstepClip, victoryClip, swordClashClip, whooshClip;
+
+	Clip mainClip, footstepClip, victoryClip, swordClashClip, whooshClip, defeatClip;
+
 
 	Sound(){
 		try {
@@ -28,6 +30,10 @@ public class Sound{
 		audioIn = AudioSystem.getAudioInputStream(new File("sounds/whoosh.wav").getAbsoluteFile());
 		whooshClip = AudioSystem.getClip();
 		whooshClip.open(audioIn);
+
+		audioIn = AudioSystem.getAudioInputStream(new File("sounds/defeat_theme.wav").getAbsoluteFile());
+		defeatClip = AudioSystem.getClip();
+		defeatClip.open(audioIn);
 
 		playClip(mainClip);
 	    } catch(Exception ex) {
