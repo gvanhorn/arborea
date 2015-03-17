@@ -393,6 +393,7 @@ public class Screen extends JLayeredPane{
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			if(hit){
 				soundmanager.stopClip(soundmanager.swordClashClip);
+				soundmanager.swordClashClip.setMicrosecondPosition(0);
 				soundmanager.playClip(soundmanager.swordClashClip);
 			}
 			paintHitMiss(clicked, hit);	
@@ -417,6 +418,7 @@ public class Screen extends JLayeredPane{
 		paintHitMiss(clicked, hit);
 		if(hit){
 			soundmanager.stopClip(soundmanager.swordClashClip);
+			soundmanager.swordClashClip.setMicrosecondPosition(0);
 			soundmanager.playClip(soundmanager.swordClashClip);
 		}
 		this.setSelected(null);
