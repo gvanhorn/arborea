@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*
- * www.redblobgames.com/grids/hexagons/
- */
-
-
 public class Board implements java.io.Serializable{
 	Hex[][] board;
 	List<Unit> units;
@@ -53,9 +48,8 @@ public class Board implements java.io.Serializable{
 		for(int i = 0; i < rows; i++){
 			//Axial coordinate r stays the same the entire row
 			r = i - radius;
-			
 			rowLength = radius + counter;
-			//System.out.println(rowLength);
+			
 			//initialize row with correct length
 			if(i <= radius-1){	
 				board[i] = new Hex[rowLength];
@@ -67,9 +61,10 @@ public class Board implements java.io.Serializable{
 			
 			//fill row with hexes and their axial coordinates
 			for(int j = 0; j < rowLength; j ++){
+			
 				//calculate axial coordinate q from array indexes.
 				q = -radius - Math.min(0, r) + j;
-				//System.out.println("q and r are resp.: " + q + "," + r);
+
 				//Create new hex with axialcoordinates
 				board[i][j] = new Hex(q, r, palette.green);
 			}
@@ -107,7 +102,7 @@ public class Board implements java.io.Serializable{
 	}
 	
 	
-	//Read the file initialUnits.txt and set them on the board.
+	//Read the initialUnits file and place them on the board.
 	private void setupUnits(){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
@@ -140,8 +135,7 @@ public class Board implements java.io.Serializable{
 						u = new General(owner);
 						break;
 					default:
-						System.out.println("Did not recognize the type: "  + type + " when placing units on the board.");
-				
+						System.out.println("Did not recognize the type: "  + type + " when placing units on the board.");		
 				}
 				
 				if(u != null){
@@ -154,11 +148,14 @@ public class Board implements java.io.Serializable{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		setWSModifiers();
-		
+
+		setWeaponSkillModifiers();
+
+		// Create lists to easily keep track of human and cpu units, this to prevent looping over all hexes
 		humanUnits = new ArrayList<Unit>();
 		cpuUnits = new ArrayList<Unit>();
 		
+		// Add units to lists
 		for(Unit u : this.units){
 			if(u.owner.equals("cpu")){
 				cpuUnits.add(u);
@@ -173,6 +170,7 @@ public class Board implements java.io.Serializable{
 		cpu = c;
 	}
 	
+	// Gets hexes adjacent to the provided hex, return a point array with the adjacent hex coordinates
 	public Point[] getAdjacent(Hex h){
 		int[][] directions = {{1, 0}, {1, -1}, {0, -1},{-1, 0},{-1, 1}, {0, 1}};
 		Point[] adjacent = new Point[6];
@@ -186,7 +184,7 @@ public class Board implements java.io.Serializable{
 		return adjacent;
 	}
 	
-	public void setWSModifiers(){
+	public void setWeaponSkillModifiers(){
 		for(Unit u: units){
 			int wsm = 0;
 			Unit adj; 
@@ -282,10 +280,11 @@ public class Board implements java.io.Serializable{
 	}
 
 	public Hex getSelectedHex() {
-		// TODO Auto-generated method stub
 		return selectedHex;
 	}
 
+
+	// Updates unit lists
 	public void updatePlayerUnits() {
 		humanUnits = new ArrayList<Unit>();
 		cpuUnits = new ArrayList<Unit>();
@@ -305,6 +304,7 @@ public class Board implements java.io.Serializable{
 		}
 	}
 
+	// Check if one of the players has no more units left
 	public boolean victory(){
 		if (humanUnits.size() == 0 || cpuUnits.size() == 0){
 			return true;
@@ -313,6 +313,7 @@ public class Board implements java.io.Serializable{
 		}
 	}
 
+	// Removes units with 0 hitpoints from the board and lists
 	public void removeDead(Unit u) {
 		if(u.hitpoints == 0){
 			if (u.owner.equals("human")){
@@ -320,7 +321,6 @@ public class Board implements java.io.Serializable{
 			} else {
 				cpuUnits.remove(u);
 			}
-
 			u.getPosition().removeUnit(); 
 		}
 	}

@@ -66,25 +66,27 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		
 	}
 
+
+	// When the mouse is clicked, determine which hex was clicked, and perform necessary action.
+	// Which hex was clicked is determined by looping over all hexes, and checking if the hex contians the click location 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//long start = System.currentTimeMillis();
 		int x = e.getX();
 		int y = e.getY();
-		//System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
 		Screen screen = (Screen) e.getSource();
 		Board b = screen.board;
 		
 		for(Hex[] row: b.board){
 			for(Hex h: row){
+
 				//check which hex is clicked
 				if(h.shape.contains(x,y)){
+				
 					//If the selected hex is occupied and no hex was selected before, select the hex
 					Hex selectedHex = b.selectedHex;
 					Hex clickedHex = h;
 
 					if (selectedHex != null)	{
-
 						if(screen.selectOtherHex(selectedHex, clickedHex)){}
 						else if(screen.attackHex(selectedHex, clickedHex)){}
 						else if(screen.move(selectedHex, clickedHex)){}
@@ -92,17 +94,11 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 					}
 					else if(screen.selectHex(selectedHex, clickedHex)){}
 				}
-				
 			}
 		}
-		//long end = System.currentTimeMillis();
-		
-		//System.out.println("Mouse click event took: " +  (end-start) +  " milliseconds");
-		//screen.repaint();
 	}
 	
 	
-	//If the selected hex is occupied, a hex was already selected, they are not the same, and haves a different owner, attack it
 
 
 	@Override
@@ -129,18 +125,15 @@ public class ScreenListener implements WindowListener, WindowFocusListener, Wind
 		
 	}
 
+	// Listener for the end turn button
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
 		Screen s = (Screen) source.getParent().getParent();
 		
 		if(e.getActionCommand().equals("End turn")){
-			System.out.println("WE BE ENDING TURNS");
 			s.board.human.setTurn(false);
-			
-
 		}
-		
 	}
 
 }
