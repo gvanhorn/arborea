@@ -392,8 +392,6 @@ public class Screen extends JLayeredPane{
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			if(hit){
-				// soundmanager.stopClip(soundmanager.swordClashClip);
-				// soundmanager.swordClashClip.setMicrosecondPosition(0);
 				soundmanager.playClip(soundmanager.swordClashClip);
 			}
 			paintHitMiss(clicked, hit);	
@@ -417,8 +415,6 @@ public class Screen extends JLayeredPane{
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
 		if(hit){
-			// soundmanager.stopClip(soundmanager.swordClashClip);
-			// soundmanager.swordClashClip.setMicrosecondPosition(0);
 			soundmanager.playClip(soundmanager.swordClashClip);
 		}
 		this.setSelected(null);
@@ -472,7 +468,8 @@ public class Screen extends JLayeredPane{
 			selected.getUnit().move(clicked);
 			this.setSelected(null);
 			this.unitPanel.repaint();
-			System.out.println("Unit moved and hex deselected");
+			soundmanager.playClip(soundmanager.footstepClip);
+			
 			return true;
 		} else {
 			return false;
