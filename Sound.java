@@ -7,10 +7,12 @@ import java.io.*;
 public class Sound{
 	// String mainLoop;
 	AudioInputStream mainLoop;
+	AudioInputStream footstep;
 
 	Sound(){
 		try {
 		mainLoop = AudioSystem.getAudioInputStream(new File("sounds/Arborea.wav").getAbsoluteFile());
+		footstep = AudioSystem.getAudioInputStream(new File("sounds/footstep.wav").getAbsoluteFile());
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
