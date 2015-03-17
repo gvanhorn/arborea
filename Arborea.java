@@ -41,10 +41,9 @@ public class Arborea {
 		// Start song
 		// String audioFile = "/Users/Jeroen/arborea/sounds/Mountains.wav";
 		// Sound sound = new Sound(audioFile);
-		
-		playSound("sounds/Mountains.wav");
-		sleep(2000);
-		playSound("sounds/Mountains.wav");
+		Sound player = new Sound();
+
+		player.playSound("sounds/Mountains.wav");
 		// Start game loop
 		gameLoop(players, screen, board);
 	}
@@ -165,17 +164,5 @@ public class Arborea {
 			Thread.currentThread().interrupt();
 		}
 	}
-
-	public static void playSound(String filename) {
-	    try {
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filename).getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } catch(Exception ex) {
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-}
 
 }
