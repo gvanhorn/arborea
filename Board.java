@@ -111,7 +111,7 @@ public class Board implements java.io.Serializable{
 	private void setupUnits(){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
-			File f = new File("initialUnits_test");
+			File f = new File("initialUnits");
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String currentLine;
 			String type, owner;
@@ -305,6 +305,14 @@ public class Board implements java.io.Serializable{
 		}
 	}
 
+	public boolean victory(){
+		if (humanUnits.size() == 0 || cpuUnits.size() == 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void removeDead(Unit u) {
 		if(u.hitpoints == 0){
 			if (u.owner.equals("human")){
@@ -312,6 +320,7 @@ public class Board implements java.io.Serializable{
 			} else {
 				cpuUnits.remove(u);
 			}
+
 			u.getPosition().removeUnit(); 
 		}
 	}

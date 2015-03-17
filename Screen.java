@@ -13,7 +13,7 @@ public class Screen extends JLayeredPane{
 	int screenWidth, screenHeight;
 
 	JPanel hexPanel, unitPanel, infoPanel, popUpPanel, endTurnPanel;
-	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel, hitMissLabel, hitChanceLabel;
+	JLabel unitNameLabel, hitPointsLabel, weaponSkillLabel, hitMissLabel, winLoseLabel;
 	JLabel[] hitChanceLabels;
 	JButton endTurnButton;
 	BufferedImage goblinImg, swordsmanImg, orcImg, generalImg;
@@ -30,6 +30,8 @@ public class Screen extends JLayeredPane{
 	Screen(Board providedBoard, int[] screensize){
 		board = providedBoard;
 		Dimension dim = new Dimension(screensize[0], screensize[1]);
+		screenWidth = screensize[0];
+		screenHeight = screensize[1];
 		palette = new Palette();
 		setupPanels(dim);
 		loadImages();
@@ -79,7 +81,7 @@ public class Screen extends JLayeredPane{
 		hitPointsLabel = new JLabel("", SwingConstants.LEFT);
 		weaponSkillLabel = new JLabel("", SwingConstants.LEFT);
 		hitMissLabel = new JLabel("", SwingConstants.LEFT);
-		hitChanceLabel = new JLabel("", SwingConstants.LEFT);
+		winLoseLabel = new JLabel("", SwingConstants.LEFT);
 		
 		// Set unit name font 
 		Font font = new Font("default", Font.BOLD,14);
@@ -151,12 +153,14 @@ public class Screen extends JLayeredPane{
 
 		// Make hitChanceLabel
 		// hitChanceLabel
-		hitChanceLabel.setPreferredSize(new Dimension(10, 15));
-		hitChanceLabel.setBounds(0, 0, 100, 20);
-		Font hitChanceFont = new Font("default", Font.PLAIN, 20);
-		hitChanceLabel.setFont(hitChanceFont);
-		hitChanceLabel.setForeground(Color.black);
-		popUpPanel.add(hitChanceLabel);
+		// winLoseLabel.setPreferredSize(new Dimension(10, 15));
+		int wlLabelWidth = 600;
+		int wlLabelHeight = 130;
+		winLoseLabel.setBounds(0, 0, wlLabelWidth, wlLabelHeight);
+		// winLoseLabel.setLocation(screenWidth / 2,400);
+		winLoseLabel.setLocation((screenWidth /2) - (wlLabelWidth / 2) , (screenHeight / 2) - 200);
+
+		popUpPanel.add(winLoseLabel);
 
 		// add panels to layeredPane
 		this.add(hexPanel, JLayeredPane.DEFAULT_LAYER);
@@ -348,6 +352,24 @@ public class Screen extends JLayeredPane{
 		}
 	}
 	
+	public void paintwinLose(){
+		if (board.humanUnits.size() == 0){
+			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 152);
+			winLoseLabel.setFont(winLoseFont);
+			winLoseLabel.setText("You Lose");
+			winLoseLabel.setForeground(palette.bloodRed);
+			System.out.println("YOU LOSE");
+		} else if (board.cpuUnits.size() == 0){
+			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 67);
+			winLoseLabel.setFont(winLoseFont);
+			System.out.println("YOU WIN!!");
+			winLoseLabel.setForeground(palette.gold);
+			winLoseLabel.setText("Thou Art Victorious");
+			// winLoseLabel.setLocation(( screenWidth / 2 ) - (winLoseLabel.getPreferredSize().width / 2), ( screenHeight / 2 ) - (winLoseLabel.getPreferredSize().height / 2) );
+		}
+	}
+
+
 	public Boolean selectOtherHex(Hex selected, Hex clicked){
 		System.out.print(clicked != selected);
 		if (clicked.getUnit() != null && clicked != selected) {
@@ -386,9 +408,13 @@ public class Screen extends JLayeredPane{
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
-			
 			this.setSelected(null);
 			this.repaint();
+
+			if (board.victory()){
+				paintwinLose();
+			}
+
 			System.out.println("Unit attacked and hex deselected");
 			return true;
 		}else{
@@ -403,6 +429,10 @@ public class Screen extends JLayeredPane{
 		paintHitMiss(clicked, hit);
 		this.setSelected(null);
 		this.repaint();
+
+		if (board.victory()){
+				paintwinLose();
+		}
 		System.out.println("Unit attacked and hex deselected");
 		return true;
 	}

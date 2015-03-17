@@ -62,8 +62,9 @@ public class Arborea {
 			if (currentPlayer.getTurn() == false){
 
 				// Check for win state
-				if (Victory(players)){
+				if (board.victory()){
 					gameStillPlaying = false;
+					break;
 				} else {
 					// Give cpu the turn
 					currentPlayer = players[1];
@@ -73,8 +74,9 @@ public class Arborea {
 					cpuTurn((CpuPlayer) currentPlayer, screen, board);
 				}
 
-				if (Victory(players)){
+				if (board.victory()){
 					gameStillPlaying = false;
+					break;
 				} else { 
 					// Give human turn
 					currentPlayer = players[0];
@@ -82,11 +84,7 @@ public class Arborea {
 				}
 			}
 		}
-	}
 
-	
-	public static boolean Victory(Player[] players){
-		return false;
 	}
 
 	public static void cpuTurn(CpuPlayer cpu, Screen screen, Board b){
