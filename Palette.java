@@ -1,6 +1,10 @@
 import java.awt.Color;
 
 
+@SuppressWarnings("serial")
+/*
+ * This class defines all the colors used for painting the screen.
+ */
 public class Palette implements java.io.Serializable{
 	Color green;
 	Color orange;

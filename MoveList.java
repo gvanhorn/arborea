@@ -5,9 +5,9 @@ import java.util.Queue;
 
 @SuppressWarnings("serial")
 /*
- * 
+ *  A simple container object for two queues, one containing the type of move and 
+ *  the other containing a hexagon pair with an origin and goal hexagon for the move.
  */
-
 public class MoveList implements Serializable{
 	private Queue<Hex[]> orderedHexList;
 	private Queue<String> orderedMoveTypeList;

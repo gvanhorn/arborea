@@ -1,11 +1,9 @@
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -13,6 +11,7 @@ import java.util.List;
  */
 
 
+@SuppressWarnings("serial")
 public class Board implements java.io.Serializable{
 	Hex[][] board;
 	List<Unit> units;

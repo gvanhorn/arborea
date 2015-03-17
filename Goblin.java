@@ -2,6 +2,7 @@ import java.awt.Point;
 
 
 
+@SuppressWarnings("serial")
 public class Goblin extends Unit{
 
 	Goblin(String o){

@@ -1,6 +1,7 @@
 import java.awt.Point;
 
 
+@SuppressWarnings("serial")
 public class Orc extends Unit{
 	
 	Orc(String o){

@@ -1,12 +1,8 @@
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JComponent;
 
 
 @SuppressWarnings("serial")
@@ -19,12 +15,13 @@ public class Hex implements java.io.Serializable{
 	Unit unit;
 	Color color;
 	
-	
+	// Empty constructor
 	Hex(){
 		axialCoord = new Point();
 		occupied = false;
 	}
 	
+	// Construct a hex with a color
 	Hex(int q, int r, Color c){
 		axialCoord = new Point(q, r);
 		euclCoord = new Point();
@@ -32,24 +29,29 @@ public class Hex implements java.io.Serializable{
 		color = c;
 	}
 		
+	// Set the euclidean coordinates for this hexagon, (position on the screen).
 	public void setEuclCoord(int centerX, int centerY){
 		euclCoord.x = centerX;
 		euclCoord.y = centerY;
 	}
 
+	// return the euclidean coordinate of this hexagon
 	public Point getEuclCoord(){
 		return euclCoord;
 	}
 	
-	public boolean setCoord(int q, int r){
+	// set the (axial) coords of this hexagon 
+	public boolean setAxialCoord(int q, int r){
 		axialCoord = new Point(q, r);
 		return true;
 	}
 	
+	// get the (axial) coords of this hexagon
 	public Point getAxialCoord(){
 		return axialCoord;
 	}
 	
+	// Set the shape for this hexagon
 	public boolean setShape(Polygon p){
 		if(shape == null){
 			shape = p;
@@ -59,7 +61,8 @@ public class Hex implements java.io.Serializable{
 			return true;
 		}
 	}
-		
+	
+	// place a unit on this Hexagon, return true if it succeeded, false if already occupied
 	public boolean placeUnit(Unit newUnit){
 		if(!occupied){
 			unit = newUnit;
@@ -70,6 +73,7 @@ public class Hex implements java.io.Serializable{
 		}
 	}
 	
+	// Remove a unit from this Hexagon by simply setting occupied to false.
 	public boolean removeUnit(){
 		if(occupied){
 			occupied = false;
@@ -88,6 +92,11 @@ public class Hex implements java.io.Serializable{
 		return neighbours;
 	}
 	
+	/*
+	 *  Returns the distance from this hexagon to the specified hexagon. 
+	 *  	- first converts the axial coordinates to cube coordinates
+	 *  	- Then returns the euclidean distance within the cube divided by 2
+	 */
 	public int distanceTo(Hex h){
 		int cubex1 = axialCoord.x;
 		int cubez1 = axialCoord.y;
@@ -124,6 +133,7 @@ public class Hex implements java.io.Serializable{
 		return array;
 	}
 	
+	// Return an array of neighbouring hexes that are occupied by enemies.
 	public Hex[] getEnemyOccupiedNeighbours(){
 		List<Hex> occupied = new ArrayList<Hex>();
 		for(Hex n : neighbours){
@@ -135,6 +145,7 @@ public class Hex implements java.io.Serializable{
 		return array;
 	}
 
+	// Returns true when this Hex is adjacent to another.
 	public boolean adjacentTo(Hex h){
 		for(Hex n : neighbours){
 			if(h == n){
@@ -144,6 +155,7 @@ public class Hex implements java.io.Serializable{
 		return false;
 	}
 	
+	// Returns a string object with axial coordinates and the unit occupying this hex.
 	public String toString(){
 		if(occupied){
 			return axialCoord.toString() + ": " + unit.name;

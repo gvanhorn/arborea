@@ -1,6 +1,7 @@
 import java.awt.Point;
 
 
+@SuppressWarnings("serial")
 public class General extends Unit{
 	
 	General(String o){
