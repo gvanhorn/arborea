@@ -5,7 +5,11 @@ import java.io.*;
 
 
 public class Sound{
-	
+	String mainLoop;
+
+	Sound(){
+		mainLoop = "sounds/Mountains.wav";
+	}
 
 	public static void playSound(String filename) {
 	    
