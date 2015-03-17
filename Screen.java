@@ -22,6 +22,7 @@ public class Screen extends JLayeredPane{
 	Palette palette;
 	double hexSize;
 	Board board;
+	Sound soundmanager;
 
 	// Initializes the screen 
 	Screen(Board providedBoard, int[] screensize){
@@ -33,6 +34,7 @@ public class Screen extends JLayeredPane{
 		setupPanels(dim);
 		loadImages();
 		setupTimeListeners();
+		soundmanager = new Sound();
 	}
 
 	// Loads the images from the images folder
@@ -385,6 +387,9 @@ public class Screen extends JLayeredPane{
 				&& !selected.unit.attacked){
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
+			if(hit){
+				soundmanager.playSoundStream(soundmanager.swordClash);
+			}
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
 			this.setSelected(null);
@@ -405,6 +410,9 @@ public class Screen extends JLayeredPane{
 		Boolean hit = selected.getUnit().attack(clicked.getUnit());
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
+		if(hit){
+			soundmanager.playSoundStream(soundmanager.swordClash);
+		}
 		this.setSelected(null);
 		this.repaint();
 
