@@ -8,11 +8,6 @@ public class HumanPlayer extends Player{
 	}
 
 	@Override
-	void performTurn() {
-		
-		}
-
-	@Override
 	public void resetTurn() {
 		for(Unit u : super.board.humanUnits){
 			u.moved = false;

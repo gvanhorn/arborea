@@ -3,35 +3,31 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Random;
 
 
+@SuppressWarnings("serial")
 public class CpuPlayer extends Player{
 
 	CpuPlayer(Board b) {
 		super(b);
 	}
-
-
-	@Override
-	void performTurn() {
-		
-	}
-
+	
+	// GetTactic returns a tactic that has been developed on a deepcopy of the board.
 	public Tactic getTactic(Board board){
 		Board temp = getDeepCopy(board);
 		Tactic tact = new AggroTactic(temp);
-		
 		tact.createTactic();
-
 		return tact;
 	}
 	
+	/* 
+	 * getDeepCopy returns a (reference to, of course) deepcopy of the board.
+	 * The code is copied from: http://javatechniques.com/blog/faster-deep-copies-of-java-objects/
+	 */
 	private Board getDeepCopy(Board orig){
 		Object copy = null;
-		long start = System.currentTimeMillis();
-		 try {
+		
+		try {
 	            // Write the object out to a byte array
 	            ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	            ObjectOutputStream out = new ObjectOutputStream(bos);
@@ -51,11 +47,12 @@ public class CpuPlayer extends Player{
 	        catch(ClassNotFoundException cnfe) {
 	            cnfe.printStackTrace();
 	        }
-		 long end = System.currentTimeMillis();
-		System.out.println("Deepcopy created in: " + (end-start));
+		 // long end = System.currentTimeMillis();
+		// System.out.println("Deepcopy created in: " + (end-start));
 		return (Board) copy;
 	}
 
+	// Reset turn sets the booleans for moved and attacked in all the units the cpu owns to false.
 	@Override
 	public void resetTurn() {
 		for(Unit u : super.board.cpuUnits){
@@ -65,6 +62,7 @@ public class CpuPlayer extends Player{
 		
 	}
 
+	// Utility function for viewing a players units.
 	@Override
 	public void printUnits() {
 		for(Unit u : super.board.cpuUnits){
