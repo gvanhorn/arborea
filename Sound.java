@@ -4,36 +4,66 @@ import java.io.*;
 
 public class Sound{
 	// String mainLoop;
-	AudioInputStream mainLoop;
-	AudioInputStream footstep;
-	AudioInputStream victory;
-	AudioInputStream swordClash;
+	AudioInputStream audioIn;
+	Clip mainClip, footstepClip, victoryClip, swordClashClip;
 
 	Sound(){
 		try {
-		mainLoop = AudioSystem.getAudioInputStream(new File("sounds/Arborea.wav").getAbsoluteFile());
-		footstep = AudioSystem.getAudioInputStream(new File("sounds/footstep.wav").getAbsoluteFile());
-		footstep = AudioSystem.getAudioInputStream(new File("sounds/Victory_Theme.wav").getAbsoluteFile());
-		swordClash = AudioSystem.getAudioInputStream(new File("sounds/SwordClash.wav").getAbsoluteFile());
+		audioIn = AudioSystem.getAudioInputStream(new File("sounds/Arborea.wav").getAbsoluteFile());
+		mainClip = AudioSystem.getClip();
+		mainClip.open(audioIn);
 
+		audioIn = AudioSystem.getAudioInputStream(new File("sounds/footstep.wav").getAbsoluteFile());
+		footstepClip = AudioSystem.getClip();
+		footstepClip.open(audioIn);
+
+		audioIn = AudioSystem.getAudioInputStream(new File("sounds/Victory_Theme.wav").getAbsoluteFile());
+		victoryClip = AudioSystem.getClip();
+		victoryClip.open(audioIn);
+
+		audioIn = AudioSystem.getAudioInputStream(new File("sounds/SwordClash.wav").getAbsoluteFile());
+		swordClashClip = AudioSystem.getClip();
+		swordClashClip.open(audioIn);
+
+		playClip(mainClip);
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
 	    }
 	}
 
-	public void playSound(String filename) {
+	// public void playSound(String filename) {
 	    
+	//     try {
+	//         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filename).getAbsoluteFile());
+	//         Clip clip = AudioSystem.getClip();
+	//         clip.open(audioInputStream);
+	//         clip.start();
+	//     } catch(Exception ex) {
+	//         System.out.println("Error with playing sound.");
+	//         ex.printStackTrace();
+	//     }
+	// }
+
+	public void playClip(Clip clip){
 	    try {
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filename).getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
 	        clip.start();
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
 	    }
 	}
+
+	public void stopClip(Clip clip){
+	    try {
+	        clip.stop();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }
+	}
+
+
 
 	public void playSoundStream(AudioInputStream audio){
 	    try {
@@ -44,6 +74,5 @@ public class Sound{
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
 	    }
-
 	}
 }

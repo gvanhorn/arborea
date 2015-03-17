@@ -349,6 +349,8 @@ public class Screen extends JLayeredPane{
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setForeground(palette.gold);
 			winLoseLabel.setText("Thou Art Victorious");
+			soundmanager.stopClip(soundmanager.mainClip);
+			soundmanager.playClip(soundmanager.victoryClip);
 		}
 	}
 
@@ -388,7 +390,8 @@ public class Screen extends JLayeredPane{
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			if(hit){
-				soundmanager.playSoundStream(soundmanager.swordClash);
+				soundmanager.stopClip(soundmanager.swordClashClip);
+				soundmanager.playClip(soundmanager.swordClashClip);
 			}
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
@@ -411,7 +414,8 @@ public class Screen extends JLayeredPane{
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
 		if(hit){
-			soundmanager.playSoundStream(soundmanager.swordClash);
+			soundmanager.stopClip(soundmanager.swordClashClip);
+			soundmanager.playClip(soundmanager.swordClashClip);
 		}
 		this.setSelected(null);
 		this.repaint();

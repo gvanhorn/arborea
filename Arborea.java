@@ -41,8 +41,8 @@ public class Arborea {
 		// Start song
 		// String audioFile = "/Users/Jeroen/arborea/sounds/Mountains.wav";
 		// Sound sound = new Sound(audioFile);
-		Sound player = new Sound();
-		player.playSoundStream(player.mainLoop);
+		// Sound player = new Sound();
+		// player.playSoundStream(player.mainLoop);
 		// Start game loop
 		gameLoop(players, screen, board);
 	}
@@ -95,10 +95,8 @@ public class Arborea {
 				}
 			}
 		}
-
 	}
-
-
+	
 	/* cpuTurn gets a tactic for the current board. The tactic is returned in two lists, 
 	 * a move list, and type list. Moves contains which hex should perform an action on which hex, 
 	 * types specifies wether this action is a move or an attack.
