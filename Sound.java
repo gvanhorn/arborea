@@ -51,7 +51,14 @@ public class Sound{
 
 	public void playClip(Clip clip){
 	    try {
-	        clip.start();
+	    	if ( clip.isRunning() || clip.isActive() ){
+	        	clip.stop();
+	        	clip.setMicrosecondPosition(0);
+	        	clip.start();
+	    	} else {
+	    		clip.start();
+	    	}
+	    	
 	    } catch(Exception ex) {
 	        System.out.println("Error with playing sound.");
 	        ex.printStackTrace();
