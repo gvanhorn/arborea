@@ -15,43 +15,15 @@ public class CpuPlayer extends Player{
 
 	@Override
 	void performTurn() {
-		//Perform random move
-		//int numberOfUnits = super.units.size();
-		//Random rnd = new Random();
-		//int index = rnd.nextInt(numberOfUnits);
-		//int index;
+
 		
 		Board temp = getDeepCopy(super.board);
 		Tactic tact = new AggroTactic(temp);
 		
 		
-		tact.createTactic();
+		tact.createMoves();
+		tact.print();
 		tact.executeMoves(super.board);
-		
-		//Do a random move for every unit.
-//		for(Unit u : super.myUnits){
-//			Hex[] hexes = u.getPosition().getUnOccupiedNeighbours();
-//			if(hexes.length > 0){
-//				index = rnd.nextInt(hexes.length);
-//				u.move(hexes[index]);
-//			}
-//		}
-		
-		/*
-		 * Move phase:
-		 * - important measures: distance to (closest) target, weaponSkillModifier
-		 * - when maximizing wsm that distance probably increases
-		 * - when minimizing distance to target, wsm probably decreases.
-		 * 
-		 * Conclusion:
-		 * - 
-		 */
-		
-		/*
-		 * Attack phase:
-		 * - focus attacks on minimal number of targets
-		 * - focus on targets with low hp
-		 */
 		
 	}
 	

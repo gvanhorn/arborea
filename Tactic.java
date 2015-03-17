@@ -10,38 +10,35 @@ import java.util.Queue;
 
 public abstract class Tactic {
 
-	private Board board;
+	protected Board board;
 	MoveList movelist;
 	int[][] distances;
-	List<Unit> myUnits;
-	List<Unit> opponentUnits;
-	
+
 	abstract MoveList getMoveList();
-	abstract void createTactic();
+	abstract void createMoves();
 	
 	Tactic(Board b){
 		board = b;
-		Player cpu = b.cpu;
-		myUnits = b.cpuUnits;
-		opponentUnits = b.humanUnits;
-		distances = new int[myUnits.size()][opponentUnits.size()];
+		board.updatePlayerUnits();
 		
-		for(int i=0; i<myUnits.size();i++){
-			for(int j=0; j<opponentUnits.size();j++){
-				distances[i][j] = myUnits.get(i).getPosition().distanceTo(opponentUnits.get(j).getPosition());
+		
+		distances = new int[board.cpuUnits.size()][board.humanUnits.size()];
+		for(int i=0; i<board.cpuUnits.size();i++){
+			for(int j=0; j<board.humanUnits.size();j++){
+				distances[i][j] = board.cpuUnits.get(i).getPosition().distanceTo(board.humanUnits.get(j).getPosition());
 			}
 		}
 	}
 	
 	public Unit getClosestEnemyUnit(Unit from){
 		Unit to = null;
-		int i = myUnits.indexOf(from);
+		int i = board.cpuUnits.indexOf(from);
 		int lowestDistance = board.radius*2;
 		int j=0;
 		for(int distance: distances[i]){
 			
 			if(distance < lowestDistance){
-				to = opponentUnits.get(j);
+				to = board.humanUnits.get(j);
 				lowestDistance = distance;
 			}
 			j++;
@@ -55,7 +52,10 @@ public abstract class Tactic {
 		Queue<Hex[]> moves = movelist.getOrderedHexList();
 		Queue<String> types = movelist.getOrderedTypeList();
 		int totalmoves = moves.size();
-		System.out.println("Number of moves planned: " + totalmoves);
+		//System.out.println("Number of moves planned: " + totalmoves);
+		
+		
+		
 		int i;
 		for(i=0; i < totalmoves; i++){
 			Hex[] move = moves.poll();
@@ -71,6 +71,7 @@ public abstract class Tactic {
 			}
 			if(type.equals("attack")){
 				from.getUnit().attack(to.getUnit());
+				b.updatePlayerUnits();
 			}
 			
 		}
@@ -80,8 +81,8 @@ public abstract class Tactic {
 	
 	public void printDistances(){
 		int i=0,j=0;
-		for(Unit u : myUnits){
-			for(Unit u2 : opponentUnits){
+		for(Unit u : board.cpuUnits){
+			for(Unit u2 : board.humanUnits){
 				System.out.println("Distance from unit: " + u.toString() + " to unit: " + u2.toString() + "is: " + distances[i][j]);
 				j++;
 			}
@@ -94,10 +95,13 @@ public abstract class Tactic {
 		MoveList tmp = getDeepCopy(movelist);
 		Queue<Hex[]> hexlist = tmp.getOrderedHexList();
 		Queue<String> stringlist = tmp.getOrderedTypeList();
+		int size = hexlist.size();
+		System.out.println("TACTIC MOVE LENGTH " + size);
 		
-		for(int i=0; i<hexlist.size();i++){
+		for(int i=0; i<size;i++){
 			Hex[] hexes = hexlist.remove();
-			System.out.println(stringlist.remove() + " from: " + hexes[0].toString() + " to: " + hexes[1].toString());
+			String s = stringlist.remove();
+			System.out.println(s + " from: " + hexes[0].toString() + " to: " + hexes[1].toString());
 		}
 			
 	}

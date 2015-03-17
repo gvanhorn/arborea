@@ -155,8 +155,10 @@ public class Board implements java.io.Serializable{
 			e.printStackTrace();
 		}
 		setWSModifiers();
+		
 		humanUnits = new ArrayList<Unit>();
 		cpuUnits = new ArrayList<Unit>();
+		
 		for(Unit u : this.units){
 			if(u.owner.equals("cpu")){
 				cpuUnits.add(u);
@@ -282,6 +284,25 @@ public class Board implements java.io.Serializable{
 	public Hex getSelectedHex() {
 		// TODO Auto-generated method stub
 		return selectedHex;
+	}
+
+	public void updatePlayerUnits() {
+		humanUnits = new ArrayList<Unit>();
+		cpuUnits = new ArrayList<Unit>();
+		units = new ArrayList<Unit>();
+		
+		for(Hex[] row : board){
+			for(Hex h : row){
+				if(h.occupied){
+					if(h.getUnit().owner.equals("cpu")){
+						cpuUnits.add(h.getUnit());
+					}else{
+						humanUnits.add(h.getUnit());
+					}
+					units.add(h.getUnit());
+				}
+			}
+		}
 	}
 	
 

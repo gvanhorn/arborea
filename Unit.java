@@ -84,6 +84,7 @@ public abstract class Unit implements java.io.Serializable{
 		for(Unit u : units){
 			if(!u.owner.equals(this.owner)){
 				enemies.add(u);
+				System.out.println("Enemy Adjacent to: " + this.toString() + " is: " + u.toString());
 			}
 		}
 		return enemies;
@@ -109,6 +110,7 @@ public abstract class Unit implements java.io.Serializable{
 	}
 		
 	public void move(Hex to){
+		
 		if(!to.occupied && Arrays.asList(position.neighbours).contains(to) && !moved){
 			position.removeUnit();
 			
@@ -134,8 +136,7 @@ public abstract class Unit implements java.io.Serializable{
 	public Hex moveTowards(Unit target){
 		
 		if(position.adjacentTo(target.position)){
-			this.move(position);
-			return null;
+			return position;
 		}
 		
 		Hex bestmove = null;
@@ -154,8 +155,14 @@ public abstract class Unit implements java.io.Serializable{
 				}
 			}
 		}
-		this.move(bestmove);
-		return bestmove;
+		if(bestmove!=null){
+			System.out.println(bestmove.toString());
+			this.move(bestmove);
+			return bestmove;
+		}else{
+			return bestmove;
+		}
+		
 		
 	}
 	
