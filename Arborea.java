@@ -41,10 +41,8 @@ public class Arborea {
 		// Start song
 		// String audioFile = "/Users/Jeroen/arborea/sounds/Mountains.wav";
 		// Sound sound = new Sound(audioFile);
-		
-		playSound("sounds/Mountains.wav");
-		sleep(2000);
-		playSound("sounds/Mountains.wav");
+		// Sound player = new Sound();
+		// player.playSoundStream(player.mainLoop);
 		// Start game loop
 		gameLoop(players, screen, board);
 	}
@@ -97,10 +95,8 @@ public class Arborea {
 				}
 			}
 		}
-
 	}
-
-
+	
 	/* cpuTurn gets a tactic for the current board. The tactic is returned in two lists, 
 	 * a move list, and type list. Moves contains which hex should perform an action on which hex, 
 	 * types specifies wether this action is a move or an attack.
@@ -136,7 +132,7 @@ public class Arborea {
 			if(type.equals("move") && from != to){
 				screen.setSelected(from);
 				screen.repaint();
-				sleep(200);
+				sleep(333);
 
 				// Perform move
 				from.getUnit().move(to);
@@ -145,13 +141,13 @@ public class Arborea {
 			if(type.equals("attack")){
 				screen.setSelected(from);
 				screen.repaint();
-				sleep(200);
+				sleep(333);
 
 				// perform attack
 				screen.cpuAttackHex(from, to);
 			}
 			screen.repaint();
-			sleep(100);
+			sleep(333);
 		}
 		screen.setSelected(null);
 		screen.hexPanel.repaint();
@@ -165,17 +161,5 @@ public class Arborea {
 			Thread.currentThread().interrupt();
 		}
 	}
-
-	public static void playSound(String filename) {
-	    try {
-	        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filename).getAbsoluteFile());
-	        Clip clip = AudioSystem.getClip();
-	        clip.open(audioInputStream);
-	        clip.start();
-	    } catch(Exception ex) {
-	        System.out.println("Error with playing sound.");
-	        ex.printStackTrace();
-	    }
-}
 
 }

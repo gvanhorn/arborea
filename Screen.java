@@ -22,6 +22,7 @@ public class Screen extends JLayeredPane{
 	Palette palette;
 	double hexSize;
 	Board board;
+	Sound soundmanager;
 
 	// Initializes the screen 
 	Screen(Board providedBoard, int[] screensize){
@@ -33,6 +34,7 @@ public class Screen extends JLayeredPane{
 		setupPanels(dim);
 		loadImages();
 		setupTimeListeners();
+		soundmanager = new Sound();
 	}
 
 	// Loads the images from the images folder
@@ -342,11 +344,15 @@ public class Screen extends JLayeredPane{
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setText("You Lose");
 			winLoseLabel.setForeground(palette.bloodRed);
+			soundmanager.stopClip(soundmanager.mainClip);
+			soundmanager.playClip(soundmanager.defeatClip);
 		} else if (board.cpuUnits.size() == 0){
 			Font winLoseFont = new Font("Lucida Blackletter", Font.PLAIN, 67);
 			winLoseLabel.setFont(winLoseFont);
 			winLoseLabel.setForeground(palette.gold);
 			winLoseLabel.setText("Thou Art Victorious");
+			soundmanager.stopClip(soundmanager.mainClip);
+			soundmanager.playClip(soundmanager.victoryClip);
 		}
 	}
 
@@ -385,6 +391,11 @@ public class Screen extends JLayeredPane{
 				&& !selected.unit.attacked){
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
+			if(hit){
+				soundmanager.playClip(soundmanager.swordClashClip);
+			}else{
+				soundmanager.playClip(soundmanager.whooshClip);
+			}
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
 			this.setSelected(null);
@@ -405,6 +416,11 @@ public class Screen extends JLayeredPane{
 		Boolean hit = selected.getUnit().attack(clicked.getUnit());
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
+		if(hit){
+			soundmanager.playClip(soundmanager.swordClashClip);
+		}else{
+			soundmanager.playClip(soundmanager.whooshClip);
+		}
 		this.setSelected(null);
 		this.repaint();
 
@@ -456,7 +472,8 @@ public class Screen extends JLayeredPane{
 			selected.getUnit().move(clicked);
 			this.setSelected(null);
 			this.unitPanel.repaint();
-			System.out.println("Unit moved and hex deselected");
+			soundmanager.playClip(soundmanager.footstepClip);
+			
 			return true;
 		} else {
 			return false;
