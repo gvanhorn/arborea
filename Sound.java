@@ -7,6 +7,9 @@ public class Sound{
 	AudioInputStream audioIn;
 
 	Clip mainClip, footstepClip, victoryClip, swordClashClip, whooshClip, defeatClip;
+	String stepFile = "sounds/footstep.wav";
+	String whooshFile = "sounds/whoosh.wav";
+	String swordFile = "sounds/SwordClash.wav";
 
 
 	Sound(){
@@ -80,6 +83,17 @@ public class Sound{
 	    }
 	}
 
+	public void playFile(String file){
+		try {
+		AudioInputStream localStream = AudioSystem.getAudioInputStream(new File(file).getAbsoluteFile());
+			Clip localClip = AudioSystem.getClip();
+			localClip.open(localStream);
+			localClip.start();
+	    } catch(Exception ex) {
+	        System.out.println("Error with playing sound.");
+	        ex.printStackTrace();
+	    }	
+	}
 
 
 	public void playSoundStream(AudioInputStream audio){

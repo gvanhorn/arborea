@@ -392,9 +392,10 @@ public class Screen extends JLayeredPane{
 			
 			Boolean hit = selected.getUnit().attack(clicked.getUnit());
 			if(hit){
-				soundmanager.playClip(soundmanager.swordClashClip);
+				// soundmanager.playClip(soundmanager.swordClashClip);
+				soundmanager.playFile(soundmanager.swordFile);
 			}else{
-				soundmanager.playClip(soundmanager.whooshClip);
+				soundmanager.playFile(soundmanager.whooshFile);
 			}
 			paintHitMiss(clicked, hit);	
 			board.removeDead(clicked.getUnit());
@@ -417,9 +418,9 @@ public class Screen extends JLayeredPane{
 		board.removeDead(clicked.getUnit());
 		paintHitMiss(clicked, hit);
 		if(hit){
-			soundmanager.playClip(soundmanager.swordClashClip);
+			soundmanager.playFile(soundmanager.swordFile);
 		}else{
-			soundmanager.playClip(soundmanager.whooshClip);
+			soundmanager.playFile(soundmanager.whooshFile);
 		}
 		this.setSelected(null);
 		this.repaint();
@@ -472,7 +473,9 @@ public class Screen extends JLayeredPane{
 			selected.getUnit().move(clicked);
 			this.setSelected(null);
 			this.unitPanel.repaint();
-			soundmanager.playClip(soundmanager.footstepClip);
+			// soundmanager.playClip(soundmanager.footstepClip);
+			soundmanager.playFile(soundmanager.stepFile);
+			System.out.println("PLAYING STEP");
 			
 			return true;
 		} else {

@@ -105,7 +105,7 @@ public class Board implements java.io.Serializable{
 	private void setupUnits(){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
-			File f = new File("initialUnits");
+			File f = new File("astardemo");
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String currentLine;
 			String type, owner;

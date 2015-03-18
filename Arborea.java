@@ -148,6 +148,10 @@ public class Arborea {
 			}
 			screen.repaint();
 			sleep(333);
+			if (b.victory()){
+				break;
+			}
+
 		}
 		screen.setSelected(null);
 		screen.hexPanel.repaint();
