@@ -20,20 +20,20 @@ public class Board implements java.io.Serializable{
 	List<Unit> cpuUnits;
 	
 	//Constructor for the board, screensize is the size of the window
-	Board(int[] screensize){
+	Board(int[] screensize, String unitFile){
 		this.screensize = screensize;
 		palette = new Palette();
 		radius = 4;
-		initBoard();	
+		initBoard(unitFile);	
 	}
 	
 	//Initialize the board
-	private void initBoard(){
+	private void initBoard(String unitFile){
 		board = new Hex[2*radius+1][];
 		units = new ArrayList<Unit>();
 		setupHexes();
 		setupNeighbors();
-		setupUnits();
+		setupUnits(unitFile);
 	}
 	
 	//Create the Hex objects and fill the board array
@@ -102,10 +102,10 @@ public class Board implements java.io.Serializable{
 	
 	
 	//Read the initialUnits file and place them on the board.
-	private void setupUnits(){
+	private void setupUnits(String unitFile){
 		//Set up the initial units as specified by the file initialUnits.txt
 		try{
-			File f = new File("astardemo");
+			File f = new File(unitFile);
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String currentLine;
 			String type, owner;

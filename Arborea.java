@@ -7,13 +7,18 @@ import java.io.*;
 
 public class Arborea {
 	
-	public static void main(String[] args){		
+	public static void main(String[] args){
+		String unitFile = "initialUnits";
+		if(args.length > 0){
+			unitFile = args[0];
+		}
+		
 		
 		// Set screen size
 		int[] screensize = {800, 800};
 
 		// Initialize Board
-		Board board = new Board(screensize);
+		Board board = new Board(screensize, unitFile);
 		board.createHexGridGraphics();
 
 		// Create Players and add to board

@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,7 +27,7 @@ public class AggroTactic extends Tactic{
 			Hex targetHex = target.getPosition();
 			
 			//Only plan a move if you are not already next to your target and there is space next to it.
-			if((!Arrays.asList(targetHex.neighbours).contains(from)) && (targetHex.getUnOccupiedNeighbours().length>0)){
+			if((!targetHex.adjacentTo(from)) && (targetHex.getUnOccupiedNeighbours().length>0)){
 				
 				//Move to the closest unoccupied neighbour of the target.
 				Hex to = targetHex.getUnOccupiedNeighbours()[0];
